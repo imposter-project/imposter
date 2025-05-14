@@ -99,4 +99,8 @@ class RemoteHttpExchange(
     override fun put(key: String, value: Any) {
         initiatingExchange.put(key, value)
     }
+
+    override fun next() {
+        throw UnsupportedOperationException()
+    }
 }

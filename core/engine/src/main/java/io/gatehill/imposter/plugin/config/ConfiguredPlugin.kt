@@ -45,9 +45,11 @@ package io.gatehill.imposter.plugin.config
 import io.gatehill.imposter.ImposterConfig
 import io.gatehill.imposter.config.LoadedConfig
 import io.gatehill.imposter.config.util.ConfigUtil
+import io.gatehill.imposter.http.HttpRouter
 import io.gatehill.imposter.http.UniqueRoute
 import io.gatehill.imposter.plugin.RoutablePlugin
 import io.gatehill.imposter.plugin.config.resource.PassthroughResourceConfig
+import io.gatehill.imposter.service.InterceptorService
 import io.gatehill.imposter.util.ResourceUtil
 import io.vertx.core.Vertx
 import org.apache.logging.log4j.LogManager
@@ -60,7 +62,8 @@ import javax.inject.Inject
  */
 abstract class ConfiguredPlugin<T : BasicPluginConfig> @Inject constructor(
     protected val vertx: Vertx,
-    protected val imposterConfig: ImposterConfig
+    protected val imposterConfig: ImposterConfig,
+    private val interceptorService: InterceptorService,
 ) : RoutablePlugin, ConfigurablePlugin<T> {
 
     private val logger: Logger = LogManager.getLogger(ConfiguredPlugin::class.java)
@@ -110,6 +113,23 @@ abstract class ConfiguredPlugin<T : BasicPluginConfig> @Inject constructor(
     protected open fun configurePlugin(configs: List<T>) {
         /* no op */
     }
+
+    override fun configureRoutes(router: HttpRouter) {
+        configureInterceptorRoutes(router)
+        configureResourceRoutes(router)
+    }
+
+    fun configureInterceptorRoutes(router: HttpRouter) {
+        configs.forEach { config ->
+            if (config is InterceptorsHolder<*>) {
+                config.interceptors?.forEach { interceptor ->
+                    interceptorService.configureInterceptorRoute(router, config, interceptor)
+                }
+            }
+        }
+    }
+
+    protected abstract fun configureResourceRoutes(router: HttpRouter)
 
     /**
      * Iterates over [configs] and subresources to find unique route combinations

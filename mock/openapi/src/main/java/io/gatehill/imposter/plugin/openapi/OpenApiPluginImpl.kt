@@ -64,6 +64,7 @@ import io.gatehill.imposter.script.ResponseBehaviour
 import io.gatehill.imposter.server.ServerFactory
 import io.gatehill.imposter.service.DefaultBehaviourHandler
 import io.gatehill.imposter.service.HandlerService
+import io.gatehill.imposter.service.InterceptorService
 import io.gatehill.imposter.service.ResponseRoutingService
 import io.gatehill.imposter.service.ResponseService
 import io.gatehill.imposter.service.ResponseService.ResponseSender
@@ -83,9 +84,6 @@ import io.vertx.core.Vertx
 import org.apache.logging.log4j.LogManager
 import java.util.concurrent.CompletableFuture
 import javax.inject.Inject
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 /**
  * Plugin for OpenAPI (OAI; formerly known as 'Swagger').
@@ -98,6 +96,7 @@ class OpenApiPluginImpl @Inject constructor(
     vertx: Vertx,
     imposterConfig: ImposterConfig,
     private val handlerService: HandlerService,
+    interceptorService: InterceptorService,
     private val specificationService: SpecificationService,
     private val exampleService: ExampleService,
     private val responseService: ResponseService,
@@ -106,7 +105,7 @@ class OpenApiPluginImpl @Inject constructor(
     private val serverFactory: ServerFactory,
     private val specificationLoaderService: SpecificationLoaderService,
 ) : ConfiguredPlugin<OpenApiPluginConfig>(
-    vertx, imposterConfig
+    vertx, imposterConfig, interceptorService
 ) {
     override val configClass = OpenApiPluginConfig::class.java
     private lateinit var allSpecs: List<ParsedSpec>
@@ -135,7 +134,7 @@ class OpenApiPluginImpl @Inject constructor(
 
     private val resourceMatcher = SingletonResourceMatcher.instance
 
-    override fun configureRoutes(router: HttpRouter) {
+    override fun configureResourceRoutes(router: HttpRouter) {
         if (configs.isEmpty()) {
             LOGGER.debug("No OpenAPI configuration files provided - skipping plugin setup")
             return

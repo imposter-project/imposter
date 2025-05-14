@@ -43,18 +43,20 @@
 
 package io.gatehill.imposter.service
 
+import io.gatehill.imposter.ImposterConfig
 import io.gatehill.imposter.http.HttpExchange
+import io.gatehill.imposter.http.HttpRouter
 import io.gatehill.imposter.plugin.config.PluginConfig
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
 import io.gatehill.imposter.script.ResponseBehaviourType
 import io.gatehill.imposter.util.LogUtil
+import io.gatehill.imposter.util.ResourceUtil
 import io.gatehill.imposter.util.makeFuture
 import io.gatehill.imposter.util.supervisedDefaultCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.future.future
 import org.apache.logging.log4j.LogManager
-import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 /**
@@ -62,45 +64,43 @@ import javax.inject.Inject
  * has been handled.
  */
 class InterceptorServiceImpl @Inject constructor(
+    private val handlerService: HandlerService,
     private val responseRoutingService: ResponseRoutingService,
+    private val imposterConfig: ImposterConfig,
 ) : InterceptorService, CoroutineScope by supervisedDefaultCoroutineScope {
 
-    override fun executeInterceptors(
+    override fun configureInterceptorRoute(
+        router: HttpRouter,
         pluginConfig: PluginConfig,
-        interceptors: List<BasicResourceConfig>,
-        httpExchange: HttpExchange,
-    ) = future {
-        if (interceptors.isEmpty()) {
-            return@future false
-        }
-        val handled = AtomicBoolean(true)
-        val handler = buildHandler(httpExchange, handled)
+        interceptor: BasicResourceConfig,
+    ) {
+        val routeHandler = handlerService.build(imposterConfig, pluginConfig, interceptor) { exchange ->
+            future {
+                val handler = buildHandler(exchange)
+                responseRoutingService.route(
+                    pluginConfig,
+                    interceptor,
+                    exchange,
+                    handler,
+                ).await()
 
-        for (interceptor in interceptors) {
-            responseRoutingService.route(
-                pluginConfig,
-                interceptor,
-                httpExchange,
-                handler,
-            ).await()
-
-            LOGGER.trace(
-                "Interceptor {} handled for {}: {}",
-                interceptor,
-                LogUtil.describeRequestShort(httpExchange),
-                handled
-            )
-            if (handled.get()) {
-                break
+                LOGGER.trace(
+                    "Interceptor {} handled for {}",
+                    interceptor,
+                    LogUtil.describeRequestShort(exchange),
+                )
             }
         }
-        return@future handled.get()
+
+        val path = interceptor.path ?: "/*"
+        ResourceUtil.extractResourceMethod(interceptor)?.let { method ->
+            router.route(method, path).handler(routeHandler)
+        } ?: run {
+            router.route(path).handler(routeHandler)
+        }
     }
 
-    private fun buildHandler(
-        httpExchange: HttpExchange,
-        handled: AtomicBoolean,
-    ): DefaultBehaviourHandler = { responseBehaviour ->
+    private fun buildHandler(httpExchange: HttpExchange): DefaultBehaviourHandler = { responseBehaviour ->
         makeFuture {
             when (responseBehaviour.behaviourType) {
                 ResponseBehaviourType.SHORT_CIRCUIT -> {
@@ -109,7 +109,6 @@ class InterceptorServiceImpl @Inject constructor(
                         LogUtil.describeRequestShort(httpExchange),
                         responseBehaviour,
                     )
-                    handled.set(true)
                 }
 
                 ResponseBehaviourType.DEFAULT_BEHAVIOUR -> {
@@ -117,7 +116,7 @@ class InterceptorServiceImpl @Inject constructor(
                         "Interceptor triggered continue to next for {}",
                         LogUtil.describeRequestShort(httpExchange),
                     )
-                    handled.set(false)
+                    httpExchange.next()
                 }
 
                 else -> throw IllegalStateException("Response behaviour type must be set")

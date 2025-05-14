@@ -48,6 +48,7 @@ import io.gatehill.imposter.config.ConfigReference
 import io.gatehill.imposter.config.LoadedConfig
 import io.gatehill.imposter.config.util.EnvVars
 import io.gatehill.imposter.service.HandlerService
+import io.gatehill.imposter.service.InterceptorService
 import io.gatehill.imposter.service.ResponseFileService
 import io.gatehill.imposter.service.ResponseRoutingService
 import io.gatehill.imposter.service.ResponseService
@@ -152,6 +153,7 @@ class WiremockPluginTest {
             mock<Vertx>(),
             ImposterConfig(),
             mock<HandlerService>(),
+            mock<InterceptorService>(),
             mock<ResponseFileService>(),
             mock<ResponseService>(),
             mock<ResponseRoutingService>()

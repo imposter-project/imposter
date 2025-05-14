@@ -100,4 +100,8 @@ class VertxHttpExchange(
     override fun put(key: String, value: Any) {
         routingContext.put(key, value)
     }
+
+    override fun next() {
+        routingContext.next()
+    }
 }

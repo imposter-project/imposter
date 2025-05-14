@@ -43,22 +43,17 @@
 
 package io.gatehill.imposter.service
 
-import io.gatehill.imposter.http.HttpExchange
+import io.gatehill.imposter.http.HttpRouter
 import io.gatehill.imposter.plugin.config.PluginConfig
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
-import java.util.concurrent.CompletableFuture
 
 /**
  * Executes request interceptors.
  */
 interface InterceptorService {
-    /**
-     * Execute request interceptors, indicating whether the exchange
-     * has been handled.
-     */
-    fun executeInterceptors(
+    fun configureInterceptorRoute(
+        router: HttpRouter,
         pluginConfig: PluginConfig,
-        interceptors: List<BasicResourceConfig>,
-        httpExchange: HttpExchange,
-    ): CompletableFuture<Boolean>
+        interceptor: BasicResourceConfig
+    )
 }

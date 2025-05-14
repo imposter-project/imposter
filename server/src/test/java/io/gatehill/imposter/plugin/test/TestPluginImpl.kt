@@ -49,6 +49,7 @@ import io.gatehill.imposter.http.UniqueRoute
 import io.gatehill.imposter.plugin.config.ConfiguredPlugin
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
 import io.gatehill.imposter.service.HandlerService
+import io.gatehill.imposter.service.InterceptorService
 import io.gatehill.imposter.service.ResponseRoutingService
 import io.gatehill.imposter.service.ResponseService
 import io.gatehill.imposter.util.ResourceUtil
@@ -64,15 +65,16 @@ class TestPluginImpl @Inject constructor(
     vertx: Vertx,
     imposterConfig: ImposterConfig,
     private val handlerService: HandlerService,
+    interceptorService: InterceptorService,
     private val responseService: ResponseService,
     private val responseRoutingService: ResponseRoutingService,
-) : ConfiguredPlugin<TestPluginConfig>(vertx, imposterConfig) {
+) : ConfiguredPlugin<TestPluginConfig>(vertx, imposterConfig, interceptorService) {
     private val logger: Logger = LogManager.getLogger(TestPluginImpl::class.java)
     override val configClass = TestPluginConfig::class.java
 
     private val resourceMatcher = SingletonResourceMatcher.instance
 
-    override fun configureRoutes(router: HttpRouter) {
+    override fun configureResourceRoutes(router: HttpRouter) {
         findUniqueRoutes().forEach { (route, config) -> configureRoute(config, router, route) }
     }
 

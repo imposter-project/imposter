@@ -68,6 +68,7 @@ import io.gatehill.imposter.plugin.soap.util.SoapUtil
 import io.gatehill.imposter.script.ResponseBehaviour
 import io.gatehill.imposter.service.DefaultBehaviourHandler
 import io.gatehill.imposter.service.HandlerService
+import io.gatehill.imposter.service.InterceptorService
 import io.gatehill.imposter.service.ResponseRoutingService
 import io.gatehill.imposter.service.ResponseService
 import io.gatehill.imposter.service.ResponseService.ResponseSender
@@ -80,7 +81,6 @@ import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.util.concurrent.CompletableFuture
 import javax.inject.Inject
-import kotlin.collections.set
 
 /**
  * Plugin for SOAP.
@@ -93,12 +93,13 @@ class SoapPluginImpl @Inject constructor(
     vertx: Vertx,
     imposterConfig: ImposterConfig,
     private val handlerService: HandlerService,
+    interceptorService: InterceptorService,
     private val responseService: ResponseService,
     private val responseRoutingService: ResponseRoutingService,
     private val soapExampleService: SoapExampleService,
     private val soapResponseBehaviourFactory: SoapResponseBehaviourFactory,
 ) : ConfiguredPlugin<SoapPluginConfig>(
-    vertx, imposterConfig
+    vertx, imposterConfig, interceptorService
 ) {
     override val configClass = SoapPluginConfig::class.java
 
@@ -106,7 +107,7 @@ class SoapPluginImpl @Inject constructor(
         private val LOGGER = LogManager.getLogger(SoapPluginImpl::class.java)
     }
 
-    override fun configureRoutes(router: HttpRouter) {
+    override fun configureResourceRoutes(router: HttpRouter) {
         if (configs.isEmpty()) {
             LOGGER.debug("No WSDL configuration files provided - skipping plugin setup")
             return

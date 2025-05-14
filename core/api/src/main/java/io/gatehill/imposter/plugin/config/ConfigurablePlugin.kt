@@ -48,6 +48,6 @@ import io.gatehill.imposter.config.LoadedConfig
  * @author Pete Cornish
  */
 interface ConfigurablePlugin<C : PluginConfig> {
-    fun loadConfiguration(loadedConfigs: List<LoadedConfig>)
     val configs: List<C>
+    fun loadConfiguration(loadedConfigs: List<LoadedConfig>)
 }

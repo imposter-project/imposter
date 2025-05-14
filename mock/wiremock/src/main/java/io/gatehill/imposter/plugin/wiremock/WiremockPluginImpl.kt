@@ -56,6 +56,7 @@ import io.gatehill.imposter.plugin.wiremock.model.WiremockFile
 import io.gatehill.imposter.plugin.wiremock.model.WiremockMapping
 import io.gatehill.imposter.plugin.wiremock.util.ConversionUtil
 import io.gatehill.imposter.service.HandlerService
+import io.gatehill.imposter.service.InterceptorService
 import io.gatehill.imposter.service.ResponseFileService
 import io.gatehill.imposter.service.ResponseRoutingService
 import io.gatehill.imposter.service.ResponseService
@@ -80,6 +81,7 @@ class WiremockPluginImpl @Inject constructor(
     vertx: Vertx,
     imposterConfig: ImposterConfig,
     handlerService: HandlerService,
+    interceptorService: InterceptorService,
     responseFileService: ResponseFileService,
     responseService: ResponseService,
     responseRoutingService: ResponseRoutingService,
@@ -87,6 +89,7 @@ class WiremockPluginImpl @Inject constructor(
     vertx,
     imposterConfig,
     handlerService,
+    interceptorService,
     responseFileService,
     responseService,
     responseRoutingService,

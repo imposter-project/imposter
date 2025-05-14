@@ -49,7 +49,6 @@ import io.gatehill.imposter.config.util.EnvVars
 import io.gatehill.imposter.http.*
 import io.gatehill.imposter.lifecycle.SecurityLifecycleHooks
 import io.gatehill.imposter.lifecycle.SecurityLifecycleListener
-import io.gatehill.imposter.plugin.config.InterceptorsHolder
 import io.gatehill.imposter.plugin.config.PluginConfig
 import io.gatehill.imposter.plugin.config.ResourcesHolder
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
@@ -68,7 +67,6 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.util.*
-import java.util.concurrent.CompletableFuture
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -78,7 +76,6 @@ import javax.inject.Inject
 class HandlerServiceImpl @Inject constructor(
     private val securityService: SecurityService,
     private val securityLifecycle: SecurityLifecycleHooks,
-    private val interceptorService: InterceptorService,
     private val responseService: ResponseService,
     private val upstreamService: UpstreamService,
 ) : HandlerService, CoroutineScope by supervisedDefaultCoroutineScope {
@@ -103,16 +100,36 @@ class HandlerServiceImpl @Inject constructor(
         httpExchangeHandler: HttpExchangeFutureHandler,
     ): HttpExchangeFutureHandler {
         val resolvedResourceConfigs = resolveResourceConfigs(pluginConfig)
-        val resolvedInterceptorConfigs = resolveInterceptorConfigs(pluginConfig)
         return { httpExchange: HttpExchange ->
-            handle(
-                pluginConfig,
-                httpExchangeHandler,
-                httpExchange,
-                resolvedResourceConfigs,
-                resolvedInterceptorConfigs,
-                resourceMatcher
-            )
+            future {
+                handle(
+                    pluginConfig,
+                    httpExchangeHandler,
+                    httpExchange,
+                    resolvedResourceConfigs,
+                    resourceMatcher
+                )
+            }
+        }
+    }
+
+    override fun build(
+        imposterConfig: ImposterConfig,
+        pluginConfig: PluginConfig,
+        resourceConfig: BasicResourceConfig,
+        httpExchangeHandler: HttpExchangeFutureHandler,
+    ): HttpExchangeFutureHandler {
+        val resolvedResourceConfigs = resolveResourceConfigs(pluginConfig)
+        return { httpExchange: HttpExchange ->
+            future {
+                handle(
+                    pluginConfig,
+                    httpExchangeHandler,
+                    httpExchange,
+                    resolvedResourceConfigs,
+                    resourceConfig,
+                )
+            }
         }
     }
 
@@ -221,18 +238,6 @@ class HandlerServiceImpl @Inject constructor(
         } ?: emptyList()
     }
 
-    /**
-     * Extract the interceptor configurations from the plugin configuration, if present.
-     *
-     * @param pluginConfig the plugin configuration
-     * @return the interceptor configurations
-     */
-    private fun resolveInterceptorConfigs(pluginConfig: PluginConfig): List<ResolvedResourceConfig> {
-        return (pluginConfig as? InterceptorsHolder<*>)?.interceptors?.map { config ->
-            ResolvedResourceConfig.parse(config)
-        } ?: emptyList()
-    }
-
     private fun logAppropriatelyForPath(httpExchange: HttpExchange, description: String) {
         val level = determineLogLevel(httpExchange)
         LOGGER.log(
@@ -248,39 +253,64 @@ class HandlerServiceImpl @Inject constructor(
                 IGNORED_ERROR_PATHS.any { p: Pattern -> p.matcher(path).matches() }
             }?.let { Level.TRACE } ?: if (httpExchange.response.statusCode >= 500) Level.ERROR else Level.WARN
 
-        } catch (ignored: Exception) {
+        } catch (_: Exception) {
             Level.ERROR
         }
     }
 
-    private fun handle(
+    private suspend fun handle(
         pluginConfig: PluginConfig,
         httpExchangeHandler: HttpExchangeFutureHandler,
         httpExchange: HttpExchange,
         resourceConfigs: List<ResolvedResourceConfig>,
-        interceptorConfigs: List<ResolvedResourceConfig>,
         resourceMatcher: ResourceMatcher,
-    ): CompletableFuture<Unit> = future {
+    ) {
         try {
-            httpExchange.put(LogUtil.KEY_REQUEST_START, System.nanoTime())
+            val rootResourceConfig = pluginConfig as BasicResourceConfig
+            val resourceConfig = resourceMatcher.matchSingleResourceConfig(pluginConfig, resourceConfigs, httpExchange)
+                ?: rootResourceConfig
+
+            handle(
+                pluginConfig,
+                httpExchangeHandler,
+                httpExchange,
+                resourceConfigs,
+                resourceConfig
+            )
+
+        } catch (e: Exception) {
+            httpExchange.fail(
+                RuntimeException("Unhandled exception processing request ${describeRequest(httpExchange)}", e)
+            )
+        }
+    }
+
+    private suspend fun handle(
+        pluginConfig: PluginConfig,
+        httpExchangeHandler: HttpExchangeFutureHandler,
+        httpExchange: HttpExchange,
+        resourceConfigs: List<ResolvedResourceConfig>,
+        resourceConfig: BasicResourceConfig,
+    ) {
+        try {
+            val rootResourceConfig = pluginConfig as BasicResourceConfig
+            val response = httpExchange.response
+
+            httpExchange.putIfAbsent(LogUtil.KEY_REQUEST_START) {
+                return@putIfAbsent System.nanoTime()
+            }
 
             // every request has a unique ID
-            val requestId = UUID.randomUUID().toString()
-            httpExchange.put(ResourceUtil.RC_REQUEST_ID_KEY, requestId)
-
-            val response = httpExchange.response
+            val requestId = httpExchange.getOrPut(ResourceUtil.RC_REQUEST_ID_KEY) {
+                return@getOrPut UUID.randomUUID().toString()
+            }
 
             if (shouldAddEngineResponseHeaders) {
                 response.putHeader("X-Imposter-Request", requestId)
                 response.putHeader("Server", "imposter")
             }
 
-            val matchedInterceptors = resourceMatcher.matchAllResourceConfigs(pluginConfig, interceptorConfigs, httpExchange)
-            val rootResourceConfig = pluginConfig as BasicResourceConfig
-            val resourceConfig = resourceMatcher.matchSingleResourceConfig(pluginConfig, resourceConfigs, httpExchange)
-                ?: rootResourceConfig
-
-            // allows plugins to customise behaviour
+            // note: may overwrite existing value from previous handler
             httpExchange.put(ResourceUtil.RESOURCE_CONFIG_KEY, resourceConfig)
 
             if (isRequestPermitted(rootResourceConfig, resourceConfig, resourceConfigs, httpExchange)) {
@@ -288,25 +318,18 @@ class HandlerServiceImpl @Inject constructor(
                 // a response is sent before the phase is set
                 httpExchange.phase = ExchangePhase.REQUEST_DISPATCHED
 
-                val handled = interceptorService.executeInterceptors(
-                    pluginConfig,
-                    matchedInterceptors,
-                    httpExchange
-                ).await()
-
-                if (!handled) {
-                    if (shouldForwardToUpstream(pluginConfig, resourceConfig, httpExchange)) {
-                        forwardToUpstream(pluginConfig, resourceConfig, httpExchange).await()
-                    } else {
-                        httpExchangeHandler(httpExchange).await()
-                    }
+                if (shouldForwardToUpstream(pluginConfig, resourceConfig, httpExchange)) {
+                    forwardToUpstream(pluginConfig, resourceConfig, httpExchange).await()
+                } else {
+                    httpExchangeHandler(httpExchange).await()
                 }
+
+                // note: this will log after every matching handler
                 LogUtil.logCompletion(httpExchange)
 
             } else {
                 LOGGER.trace("Request {} was not permitted to continue", describeRequest(httpExchange, requestId))
             }
-
         } catch (e: Exception) {
             httpExchange.fail(
                 RuntimeException("Unhandled exception processing request ${describeRequest(httpExchange)}", e)

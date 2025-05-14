@@ -52,6 +52,7 @@ import io.gatehill.imposter.plugin.PluginInfo
 import io.gatehill.imposter.plugin.config.ConfiguredPlugin
 import io.gatehill.imposter.plugin.sfdc.config.SfdcPluginConfig
 import io.gatehill.imposter.service.HandlerService
+import io.gatehill.imposter.service.InterceptorService
 import io.gatehill.imposter.service.ResponseFileService
 import io.gatehill.imposter.service.ResponseRoutingService
 import io.gatehill.imposter.util.FileUtil.findRow
@@ -63,8 +64,7 @@ import io.vertx.core.Vertx
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.json.JsonObject
 import org.apache.logging.log4j.LogManager
-import java.util.StringTokenizer
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -78,16 +78,17 @@ class SfdcPluginImpl @Inject constructor(
     vertx: Vertx,
     imposterConfig: ImposterConfig,
     private val handlerService: HandlerService,
+    interceptorService: InterceptorService,
     private val responseFileService: ResponseFileService,
     private val responseRoutingService: ResponseRoutingService,
 ) : ConfiguredPlugin<SfdcPluginConfig>(
-    vertx, imposterConfig
+    vertx, imposterConfig, interceptorService
 ) {
     override val configClass = SfdcPluginConfig::class.java
 
     private val resourceMatcher = SingletonResourceMatcher.instance
 
-    override fun configureRoutes(router: HttpRouter) {
+    override fun configureResourceRoutes(router: HttpRouter) {
         // oauth handler
         router.post("/services/oauth2/token").handler(
             handlerService.buildAndWrap(imposterConfig, configs, resourceMatcher) { httpExchange: HttpExchange ->

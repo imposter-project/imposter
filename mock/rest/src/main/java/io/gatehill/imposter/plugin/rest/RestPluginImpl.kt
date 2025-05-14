@@ -57,6 +57,7 @@ import io.gatehill.imposter.plugin.rest.config.RestPluginConfig
 import io.gatehill.imposter.plugin.rest.config.RestPluginResourceConfig
 import io.gatehill.imposter.script.ResponseBehaviour
 import io.gatehill.imposter.service.HandlerService
+import io.gatehill.imposter.service.InterceptorService
 import io.gatehill.imposter.service.ResponseFileService
 import io.gatehill.imposter.service.ResponseRoutingService
 import io.gatehill.imposter.service.ResponseService
@@ -80,17 +81,18 @@ open class RestPluginImpl @Inject constructor(
     vertx: Vertx,
     imposterConfig: ImposterConfig,
     private val handlerService: HandlerService,
+    private val interceptorService: InterceptorService,
     private val responseFileService: ResponseFileService,
     private val responseService: ResponseService,
     private val responseRoutingService: ResponseRoutingService,
 ) : ConfiguredPlugin<RestPluginConfig>(
-    vertx, imposterConfig
+    vertx, imposterConfig, interceptorService
 ) {
     override val configClass = RestPluginConfig::class.java
 
     private val resourceMatcher = SingletonResourceMatcher.instance
 
-    override fun configureRoutes(router: HttpRouter) {
+    override fun configureResourceRoutes(router: HttpRouter) {
         configs.forEach { config: RestPluginConfig ->
             if (config.path.isNullOrEmpty() && config.responseConfig.hasConfiguration()) {
                 // The REST plugin treats an undefined root path as equivalent to

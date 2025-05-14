@@ -44,7 +44,12 @@
 package io.gatehill.imposter.awslambda.impl.model
 
 import com.google.common.base.Strings
-import io.gatehill.imposter.http.*
+import io.gatehill.imposter.http.ExchangePhase
+import io.gatehill.imposter.http.HttpExchange
+import io.gatehill.imposter.http.HttpRequest
+import io.gatehill.imposter.http.HttpResponse
+import io.gatehill.imposter.http.HttpRoute
+import io.gatehill.imposter.http.HttpRouter
 import io.gatehill.imposter.util.HttpUtil
 import io.vertx.core.buffer.Buffer
 
@@ -66,6 +71,9 @@ class LambdaHttpExchange(
     override var phase = ExchangePhase.REQUEST_RECEIVED
 
     override var failureCause: Throwable? = null
+        private set
+
+    var shouldTriggerNextHandler = false
         private set
 
     override val response: HttpResponse = object : HttpResponse by response {
@@ -113,5 +121,9 @@ class LambdaHttpExchange(
 
     override fun put(key: String, value: Any) {
         attributes[key] = value
+    }
+
+    override fun next() {
+        shouldTriggerNextHandler = true
     }
 }

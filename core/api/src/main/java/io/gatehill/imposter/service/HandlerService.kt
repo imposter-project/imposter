@@ -49,6 +49,7 @@ import io.gatehill.imposter.http.HttpExchangeHandler
 import io.gatehill.imposter.http.HttpRouter
 import io.gatehill.imposter.http.ResourceMatcher
 import io.gatehill.imposter.plugin.config.PluginConfig
+import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
 import io.gatehill.imposter.server.ServerFactory
 
 /**
@@ -111,6 +112,13 @@ interface HandlerService {
         pluginConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
         httpExchangeHandler: HttpExchangeFutureHandler,
+    ): HttpExchangeFutureHandler
+
+    fun build(
+        imposterConfig: ImposterConfig,
+        pluginConfig: PluginConfig,
+        resourceConfig: BasicResourceConfig,
+        httpExchangeHandler: HttpExchangeFutureHandler
     ): HttpExchangeFutureHandler
 
     /**

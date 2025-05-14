@@ -87,7 +87,7 @@ abstract class LambdaServer<Request, Response>(
                 response.setStatusCode(HttpUtil.HTTP_NOT_FOUND)
 
             } else {
-                matched.forEach { route ->
+                for (route in matched) {
                     val request = buildRequest(event, route)
                     val exchange = LambdaHttpExchange(router, route, request, response, attributes)
                     val handler = route.handler ?: throw IllegalStateException("No route handler set for: $route")
@@ -99,6 +99,12 @@ abstract class LambdaServer<Request, Response>(
                     // check for exceptional route failure
                     exchange.failureCause?.let { cause ->
                         throw RuntimeException("Route failed: $route", cause)
+                    }
+                    if (exchange.shouldTriggerNextHandler) {
+                        logger.trace("Continuing to next handler (if exists) for: ${describeRequestShort(event)}")
+                    } else {
+                        logger.trace("Stopping processing for: ${describeRequestShort(event)}")
+                        break
                     }
                 }
             }

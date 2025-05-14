@@ -72,4 +72,13 @@ interface HttpExchange {
             return@run value
         }
     }
+
+    /**
+     * Like [getOrPut] but returns [Unit].
+     */
+    fun <T: Any> putIfAbsent(key: String, supplier: () -> T) {
+        getOrPut(key, supplier)
+    }
+
+    fun next()
 }

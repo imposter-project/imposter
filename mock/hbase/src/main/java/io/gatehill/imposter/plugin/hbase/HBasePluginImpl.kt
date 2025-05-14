@@ -61,6 +61,7 @@ import io.gatehill.imposter.plugin.hbase.service.ScannerService
 import io.gatehill.imposter.plugin.hbase.service.serialisation.DeserialisationService
 import io.gatehill.imposter.plugin.hbase.service.serialisation.SerialisationService
 import io.gatehill.imposter.service.HandlerService
+import io.gatehill.imposter.service.InterceptorService
 import io.gatehill.imposter.service.ResponseFileService
 import io.gatehill.imposter.service.ResponseRoutingService
 import io.gatehill.imposter.util.FileUtil.findRow
@@ -85,11 +86,12 @@ class HBasePluginImpl @Inject constructor(
     vertx: Vertx,
     imposterConfig: ImposterConfig,
     private val handlerService: HandlerService,
+    interceptorService: InterceptorService,
     private val responseFileService: ResponseFileService,
     private val responseRoutingService: ResponseRoutingService,
     private val scannerService: ScannerService,
 ) : ConfiguredPlugin<HBasePluginConfig>(
-    vertx, imposterConfig
+    vertx, imposterConfig, interceptorService
 ) {
     override val configClass = HBasePluginConfig::class.java
     private var tables: Map<String, HBasePluginConfig>? = null
@@ -105,7 +107,7 @@ class HBasePluginImpl @Inject constructor(
         tables = configs.associateBy { it.tableName }
     }
 
-    override fun configureRoutes(router: HttpRouter) {
+    override fun configureResourceRoutes(router: HttpRouter) {
         // add route for each distinct path
         tableConfigs.values.map { config: HBasePluginConfig -> ConfigAndPath(config, config.path ?: "") }
             .distinct()
