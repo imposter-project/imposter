@@ -119,12 +119,10 @@ abstract class ConfiguredPlugin<T : BasicPluginConfig> @Inject constructor(
         configureResourceRoutes(router)
     }
 
-    fun configureInterceptorRoutes(router: HttpRouter) {
-        configs.forEach { config ->
-            if (config is InterceptorsHolder<*>) {
-                config.interceptors?.forEach { interceptor ->
-                    interceptorService.configureInterceptorRoute(router, config, interceptor)
-                }
+    fun configureInterceptorRoutes(router: HttpRouter) = configs.forEach { config ->
+        if (config is InterceptorsHolder<*>) {
+            config.interceptors?.forEach { interceptor ->
+                interceptorService.configureInterceptorRoute(router, config, interceptor)
             }
         }
     }

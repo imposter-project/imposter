@@ -46,6 +46,7 @@ package io.gatehill.imposter.service
 import io.gatehill.imposter.ImposterConfig
 import io.gatehill.imposter.http.HttpExchange
 import io.gatehill.imposter.http.HttpRouter
+import io.gatehill.imposter.model.HandlerType
 import io.gatehill.imposter.plugin.config.PluginConfig
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
 import io.gatehill.imposter.script.ResponseBehaviourType
@@ -74,7 +75,12 @@ class InterceptorServiceImpl @Inject constructor(
         pluginConfig: PluginConfig,
         interceptor: BasicResourceConfig,
     ) {
-        val routeHandler = handlerService.build(imposterConfig, pluginConfig, interceptor) { exchange ->
+        val routeHandler = handlerService.build(
+            imposterConfig,
+            pluginConfig,
+            interceptor,
+            handlerType = HandlerType.INTERCEPTOR
+        ) { exchange ->
             future {
                 val handler = buildHandler(exchange)
                 responseRoutingService.route(

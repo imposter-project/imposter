@@ -89,11 +89,21 @@ class InterceptorTest : BaseVerticleTest() {
     }
 
     @Test
-    fun `interceptors should be skipped`() {
+    fun `no matching interceptor`() {
+        RestAssured.given().`when`()
+            .get("/no-interceptor-match")
+            .then()
+            .statusCode(200)
+            .body(equalTo("default"))
+    }
+
+    @Test
+    fun `interceptor has same path as resource`() {
         RestAssured.given().`when`()
             .get("/example")
             .then()
             .statusCode(200)
-            .body(equalTo("default"))
+            .body(equalTo("example"))
+            .header("X-Interceptor", "example")
     }
 }

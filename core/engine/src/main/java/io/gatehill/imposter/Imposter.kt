@@ -203,7 +203,7 @@ class Imposter(
                     imposterConfig,
                     allConfigs,
                     resourceMatcher,
-                    serverFactory.createMetricsHandler()
+                    httpExchangeHandler = serverFactory.createMetricsHandler()
                 )
             )
         }

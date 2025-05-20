@@ -16,7 +16,18 @@ interceptors:
         var req = stores.open("request");
         req.save("response", "passthrough");
 
+- path: /example
+  continue: true
+  response:
+    headers:
+      X-Interceptor: "example"
+
 resources:
+- path: /example
+  method: GET
+  response:
+    content: "example"
+
 - path: /*
   method: GET
   response:

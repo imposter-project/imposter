@@ -48,6 +48,7 @@ import io.gatehill.imposter.http.HttpExchangeFutureHandler
 import io.gatehill.imposter.http.HttpExchangeHandler
 import io.gatehill.imposter.http.HttpRouter
 import io.gatehill.imposter.http.ResourceMatcher
+import io.gatehill.imposter.model.HandlerType
 import io.gatehill.imposter.plugin.config.PluginConfig
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
 import io.gatehill.imposter.server.ServerFactory
@@ -71,12 +72,14 @@ interface HandlerService {
      * @param allPluginConfigs    all plugin configurations
      * @param resourceMatcher     the [ResourceMatcher] to use
      * @param httpExchangeHandler the consumer of the [HttpExchange]
+     * @param handlerType         the type of handler to build
      * @return the handler
      */
     fun build(
         imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>,
         resourceMatcher: ResourceMatcher,
+        handlerType: HandlerType = HandlerType.RESOURCE,
         httpExchangeHandler: HttpExchangeFutureHandler,
     ): HttpExchangeFutureHandler
 
@@ -87,6 +90,7 @@ interface HandlerService {
         imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>,
         resourceMatcher: ResourceMatcher,
+        handlerType: HandlerType = HandlerType.RESOURCE,
         httpExchangeHandler: HttpExchangeHandler,
     ): HttpExchangeFutureHandler
 
@@ -111,6 +115,7 @@ interface HandlerService {
         imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
+        handlerType: HandlerType = HandlerType.RESOURCE,
         httpExchangeHandler: HttpExchangeFutureHandler,
     ): HttpExchangeFutureHandler
 
@@ -118,7 +123,8 @@ interface HandlerService {
         imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceConfig: BasicResourceConfig,
-        httpExchangeHandler: HttpExchangeFutureHandler
+        handlerType: HandlerType = HandlerType.RESOURCE,
+        httpExchangeHandler: HttpExchangeFutureHandler,
     ): HttpExchangeFutureHandler
 
     /**
@@ -128,6 +134,7 @@ interface HandlerService {
         imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
+        handlerType: HandlerType = HandlerType.RESOURCE,
         httpExchangeHandler: HttpExchangeHandler,
     ): HttpExchangeFutureHandler
 

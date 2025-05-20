@@ -49,6 +49,7 @@ import io.gatehill.imposter.config.util.EnvVars
 import io.gatehill.imposter.http.*
 import io.gatehill.imposter.lifecycle.SecurityLifecycleHooks
 import io.gatehill.imposter.lifecycle.SecurityLifecycleListener
+import io.gatehill.imposter.model.HandlerType
 import io.gatehill.imposter.plugin.config.PluginConfig
 import io.gatehill.imposter.plugin.config.ResourcesHolder
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
@@ -87,16 +88,18 @@ class HandlerServiceImpl @Inject constructor(
         imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>,
         resourceMatcher: ResourceMatcher,
+        handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeFutureHandler,
     ): HttpExchangeFutureHandler {
         val selectedConfig = securityService.findConfigPreferringSecurityPolicy(allPluginConfigs)
-        return build(imposterConfig, selectedConfig, resourceMatcher, httpExchangeHandler)
+        return build(imposterConfig, selectedConfig, resourceMatcher, handlerType, httpExchangeHandler)
     }
 
     override fun build(
         imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
+        handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeFutureHandler,
     ): HttpExchangeFutureHandler {
         val resolvedResourceConfigs = resolveResourceConfigs(pluginConfig)
@@ -104,6 +107,7 @@ class HandlerServiceImpl @Inject constructor(
             future {
                 handle(
                     pluginConfig,
+                    handlerType,
                     httpExchangeHandler,
                     httpExchange,
                     resolvedResourceConfigs,
@@ -117,6 +121,7 @@ class HandlerServiceImpl @Inject constructor(
         imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceConfig: BasicResourceConfig,
+        handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeFutureHandler,
     ): HttpExchangeFutureHandler {
         val resolvedResourceConfigs = resolveResourceConfigs(pluginConfig)
@@ -124,6 +129,7 @@ class HandlerServiceImpl @Inject constructor(
             future {
                 handle(
                     pluginConfig,
+                    handlerType,
                     httpExchangeHandler,
                     httpExchange,
                     resolvedResourceConfigs,
@@ -137,17 +143,19 @@ class HandlerServiceImpl @Inject constructor(
         imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>,
         resourceMatcher: ResourceMatcher,
+        handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeHandler,
     ): HttpExchangeFutureHandler =
-        build(imposterConfig, allPluginConfigs, resourceMatcher, wrapInFuture(httpExchangeHandler))
+        build(imposterConfig, allPluginConfigs, resourceMatcher, handlerType, wrapInFuture(httpExchangeHandler))
 
     override fun buildAndWrap(
         imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
+        handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeHandler,
     ): HttpExchangeFutureHandler =
-        build(imposterConfig, pluginConfig, resourceMatcher, wrapInFuture(httpExchangeHandler))
+        build(imposterConfig, pluginConfig, resourceMatcher, handlerType, wrapInFuture(httpExchangeHandler))
 
     /**
      * Wraps the given [httpExchangeHandler] in a [HttpExchangeFutureHandler] and returns the future.
@@ -162,8 +170,9 @@ class HandlerServiceImpl @Inject constructor(
 
     override fun buildNotFoundExceptionHandler() = { httpExchange: HttpExchange ->
         if (
-            null == httpExchange.get(ResourceUtil.RC_REQUEST_ID_KEY) ||
-            httpExchange.get<Boolean>(ResourceUtil.RC_SEND_NOT_FOUND_RESPONSE) == true
+            null == httpExchange.get(ResourceUtil.RC_REQUEST_ID_KEY)
+            || httpExchange.get<Boolean>(ResourceUtil.RC_SEND_NOT_FOUND_RESPONSE) == true
+            || httpExchange.get<HandlerType>(ResourceUtil.RC_LAST_HANDLER_TYPE) == HandlerType.INTERCEPTOR
         ) {
             // only override response processing if the 404 did not originate from the mock engine
             // otherwise this will attempt to send a duplicate response to an already completed
@@ -260,6 +269,7 @@ class HandlerServiceImpl @Inject constructor(
 
     private suspend fun handle(
         pluginConfig: PluginConfig,
+        handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeFutureHandler,
         httpExchange: HttpExchange,
         resourceConfigs: List<ResolvedResourceConfig>,
@@ -272,6 +282,7 @@ class HandlerServiceImpl @Inject constructor(
 
             handle(
                 pluginConfig,
+                handlerType,
                 httpExchangeHandler,
                 httpExchange,
                 resourceConfigs,
@@ -287,12 +298,15 @@ class HandlerServiceImpl @Inject constructor(
 
     private suspend fun handle(
         pluginConfig: PluginConfig,
+        handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeFutureHandler,
         httpExchange: HttpExchange,
         resourceConfigs: List<ResolvedResourceConfig>,
         resourceConfig: BasicResourceConfig,
     ) {
         try {
+            httpExchange.put(ResourceUtil.RC_LAST_HANDLER_TYPE, handlerType)
+
             val rootResourceConfig = pluginConfig as BasicResourceConfig
             val response = httpExchange.response
 
