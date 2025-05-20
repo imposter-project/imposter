@@ -91,7 +91,7 @@ class SfdcPluginImpl @Inject constructor(
     override fun configureResourceRoutes(router: HttpRouter) {
         // oauth handler
         router.post("/services/oauth2/token").handler(
-            handlerService.buildAndWrap(imposterConfig, configs, resourceMatcher) { httpExchange: HttpExchange ->
+            handlerService.buildAndWrap(configs, resourceMatcher) { httpExchange: HttpExchange ->
                 LOGGER.info("Handling oauth request: {}", httpExchange.request.bodyAsString)
                 val authResponse = JsonObject()
                 authResponse.put("access_token", "dummyAccessToken")
@@ -103,7 +103,7 @@ class SfdcPluginImpl @Inject constructor(
 
         // query handler
         router.get("/services/data/{apiVersion}/query/").handler(
-            handlerService.build(imposterConfig, configs, resourceMatcher) { httpExchange: HttpExchange ->
+            handlerService.build(configs, resourceMatcher) { httpExchange: HttpExchange ->
                 val request = httpExchange.request
                 val apiVersion = request.getPathParam("apiVersion")!!
 
@@ -142,7 +142,7 @@ class SfdcPluginImpl @Inject constructor(
 
         // get SObject handler
         configs.forEach { config: SfdcPluginConfig ->
-            val handler = handlerService.build(imposterConfig, config, resourceMatcher) { httpExchange: HttpExchange ->
+            val handler = handlerService.build(config, resourceMatcher) { httpExchange: HttpExchange ->
                 // script should fire first
                 responseRoutingService.route(config, httpExchange) { responseBehaviour ->
                     makeFuture {
@@ -177,7 +177,7 @@ class SfdcPluginImpl @Inject constructor(
 
         // create SObject handler
         router.post("/services/data/{apiVersion}/sobjects/{sObjectName}").handler(
-            handlerService.buildAndWrap(imposterConfig, configs, resourceMatcher) { httpExchange: HttpExchange ->
+            handlerService.buildAndWrap(configs, resourceMatcher) { httpExchange: HttpExchange ->
                 val request = httpExchange.request
                 val sObjectName = request.getPathParam("sObjectName")
                 val sObject = request.bodyAsJson
@@ -205,7 +205,7 @@ class SfdcPluginImpl @Inject constructor(
      * @return
      */
     private fun handleUpdateRequest(): HttpExchangeFutureHandler {
-        return handlerService.buildAndWrap(imposterConfig, configs, resourceMatcher) { httpExchange: HttpExchange ->
+        return handlerService.buildAndWrap(configs, resourceMatcher) { httpExchange: HttpExchange ->
             val request = httpExchange.request
             val sObjectName = request.getPathParam("sObjectName")
             val sObjectId = request.getPathParam("sObjectId")

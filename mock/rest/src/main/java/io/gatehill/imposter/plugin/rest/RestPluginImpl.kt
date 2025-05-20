@@ -126,7 +126,7 @@ open class RestPluginImpl @Inject constructor(
         LOGGER.debug("Adding handler: {} -> {}", method, normalisedPath)
 
         router.route(method, normalisedPath).handler(
-            handlerService.build(imposterConfig, pluginConfig, resourceMatcher) { httpExchange: HttpExchange ->
+            handlerService.build(pluginConfig, resourceMatcher) { httpExchange: HttpExchange ->
                 val resourceConfig = httpExchange.get<ContentTypedConfig>(ResourceUtil.RESOURCE_CONFIG_KEY)!!
 
                 responseRoutingService.route(pluginConfig, resourceConfig, httpExchange) { responseBehaviour ->

@@ -200,7 +200,6 @@ class Imposter(
             LOGGER.trace("Metrics enabled")
             router.route("/system/metrics").handler(
                 handlerService.build(
-                    imposterConfig,
                     allConfigs,
                     resourceMatcher,
                     httpExchangeHandler = serverFactory.createMetricsHandler()
@@ -210,7 +209,7 @@ class Imposter(
 
         // status check to indicate when server is up
         router.get("/system/status").handler(
-            handlerService.buildAndWrap(imposterConfig, allConfigs, resourceMatcher) { httpExchange ->
+            handlerService.buildAndWrap(allConfigs, resourceMatcher) { httpExchange ->
                 httpExchange.response
                     .putHeader(HttpUtil.CONTENT_TYPE, HttpUtil.CONTENT_TYPE_JSON)
                     .end(HttpUtil.buildStatusResponse())
@@ -221,7 +220,7 @@ class Imposter(
         plugins.filterIsInstance<RoutablePlugin>().forEach { it.configureRoutes(router) }
 
         // configure CORS after all routes have been added
-        corsService.configure(imposterConfig, allConfigs, router, resourceMatcher)
+        corsService.configure(allConfigs, router, resourceMatcher)
 
         // fire post route config hooks
         engineLifecycle.forEach { listener: EngineLifecycleListener ->

@@ -133,7 +133,7 @@ class HBasePluginImpl @Inject constructor(
      */
     private fun addRowRetrievalRoute(pluginConfig: PluginConfig, router: HttpRouter, path: String) {
         router.get("$path/{tableName}/{recordId}/").handler(
-            handlerService.build(imposterConfig, pluginConfig, resourceMatcher) { httpExchange: HttpExchange ->
+            handlerService.build(pluginConfig, resourceMatcher) { httpExchange: HttpExchange ->
                 val request = httpExchange.request
                 val tableName = request.getPathParam("tableName")!!
                 val recordId = request.getPathParam("recordId")!!
@@ -191,7 +191,7 @@ class HBasePluginImpl @Inject constructor(
      */
     private fun addCreateScannerRoute(pluginConfig: PluginConfig, router: HttpRouter, path: String) {
         router.post("$path/{tableName}/scanner").handler(
-            handlerService.build(imposterConfig, pluginConfig, resourceMatcher) { httpExchange: HttpExchange ->
+            handlerService.build(pluginConfig, resourceMatcher) { httpExchange: HttpExchange ->
                 val tableName = httpExchange.request.getPathParam("tableName")!!
 
                 // check that the table is registered
@@ -257,7 +257,7 @@ class HBasePluginImpl @Inject constructor(
      */
     private fun addReadScannerResultsRoute(pluginConfig: HBasePluginConfig, router: HttpRouter, path: String) {
         router.get("$path/{tableName}/scanner/{scannerId}").handler(
-            handlerService.build(imposterConfig, pluginConfig, resourceMatcher) { httpExchange: HttpExchange ->
+            handlerService.build(pluginConfig, resourceMatcher) { httpExchange: HttpExchange ->
                 val request = httpExchange.request
                 val tableName = request.getPathParam("tableName")!!
                 val scannerId = request.getPathParam("scannerId")!!

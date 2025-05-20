@@ -43,7 +43,6 @@
 package io.gatehill.imposter.service
 
 import com.google.common.collect.Lists
-import io.gatehill.imposter.ImposterConfig
 import io.gatehill.imposter.config.ResolvedResourceConfig
 import io.gatehill.imposter.config.util.EnvVars
 import io.gatehill.imposter.http.*
@@ -85,18 +84,16 @@ class HandlerServiceImpl @Inject constructor(
         EnvVars.getEnv("IMPOSTER_ADD_ENGINE_RESPONSE_HEADERS")?.toBoolean() != false
 
     override fun build(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>,
         resourceMatcher: ResourceMatcher,
         handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeFutureHandler,
     ): HttpExchangeFutureHandler {
         val selectedConfig = securityService.findConfigPreferringSecurityPolicy(allPluginConfigs)
-        return build(imposterConfig, selectedConfig, resourceMatcher, handlerType, httpExchangeHandler)
+        return build(selectedConfig, resourceMatcher, handlerType, httpExchangeHandler)
     }
 
     override fun build(
-        imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
         handlerType: HandlerType,
@@ -118,7 +115,6 @@ class HandlerServiceImpl @Inject constructor(
     }
 
     override fun build(
-        imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceConfig: BasicResourceConfig,
         handlerType: HandlerType,
@@ -140,22 +136,20 @@ class HandlerServiceImpl @Inject constructor(
     }
 
     override fun buildAndWrap(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>,
         resourceMatcher: ResourceMatcher,
         handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeHandler,
     ): HttpExchangeFutureHandler =
-        build(imposterConfig, allPluginConfigs, resourceMatcher, handlerType, wrapInFuture(httpExchangeHandler))
+        build(allPluginConfigs, resourceMatcher, handlerType, wrapInFuture(httpExchangeHandler))
 
     override fun buildAndWrap(
-        imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
         handlerType: HandlerType,
         httpExchangeHandler: HttpExchangeHandler,
     ): HttpExchangeFutureHandler =
-        build(imposterConfig, pluginConfig, resourceMatcher, handlerType, wrapInFuture(httpExchangeHandler))
+        build(pluginConfig, resourceMatcher, handlerType, wrapInFuture(httpExchangeHandler))
 
     /**
      * Wraps the given [httpExchangeHandler] in a [HttpExchangeFutureHandler] and returns the future.

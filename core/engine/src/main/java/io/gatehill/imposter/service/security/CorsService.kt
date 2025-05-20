@@ -43,7 +43,6 @@
 
 package io.gatehill.imposter.service.security
 
-import io.gatehill.imposter.ImposterConfig
 import io.gatehill.imposter.http.HttpExchange
 import io.gatehill.imposter.http.HttpExchangeFutureHandler
 import io.gatehill.imposter.http.HttpMethod
@@ -70,7 +69,6 @@ class CorsService @Inject constructor(
     private val logger = LogManager.getLogger(CorsService::class.java)
 
     fun configure(
-        imposterConfig: ImposterConfig,
         allConfigs: List<PluginConfig>,
         router: HttpRouter,
         resourceMatcher: ResourceMatcher,
@@ -85,7 +83,7 @@ class CorsService @Inject constructor(
 
             // preflight
             router.route(HttpMethod.OPTIONS, "/*").handler(
-                handlePreflight(imposterConfig, selectedConfig, resourceMatcher, cors)
+                handlePreflight(selectedConfig, resourceMatcher, cors)
             )
 
             // request already handled
@@ -97,12 +95,11 @@ class CorsService @Inject constructor(
     }
     
     private fun handlePreflight(
-        imposterConfig: ImposterConfig,
         selectedConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
         cors: CorsConfig,
     ): HttpExchangeFutureHandler {
-        return handlerService.buildAndWrap(imposterConfig, selectedConfig, resourceMatcher) { exchange: HttpExchange ->
+        return handlerService.buildAndWrap(selectedConfig, resourceMatcher) { exchange: HttpExchange ->
             val origin = determineResponseOrigin(cors, exchange.request)
             origin?.let {
                 logger.debug("Serving CORS pre-flight request: ${LogUtil.describeRequest(exchange)}")

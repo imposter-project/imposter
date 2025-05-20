@@ -42,7 +42,6 @@
  */
 package io.gatehill.imposter.service
 
-import io.gatehill.imposter.ImposterConfig
 import io.gatehill.imposter.http.HttpExchange
 import io.gatehill.imposter.http.HttpExchangeFutureHandler
 import io.gatehill.imposter.http.HttpExchangeHandler
@@ -62,21 +61,19 @@ interface HandlerService {
      *
      * Example:
      * ```
-     * val handler = build(imposterConfig, allPluginConfigs, resourceMatcher) {
+     * val handler = build(allPluginConfigs, resourceMatcher) {
      *   // use httpExchange
      * }
      * router.get("/example").handler(handler)
      * ```
      *
-     * @param imposterConfig      the Imposter configuration
      * @param allPluginConfigs    all plugin configurations
      * @param resourceMatcher     the [ResourceMatcher] to use
-     * @param httpExchangeHandler the consumer of the [HttpExchange]
      * @param handlerType         the type of handler to build
+     * @param httpExchangeHandler the consumer of the [HttpExchange]
      * @return the handler
      */
     fun build(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>,
         resourceMatcher: ResourceMatcher,
         handlerType: HandlerType = HandlerType.RESOURCE,
@@ -87,7 +84,6 @@ interface HandlerService {
      * Same as [build] but wraps [httpExchangeHandler] in a future.
      */
     fun buildAndWrap(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>,
         resourceMatcher: ResourceMatcher,
         handlerType: HandlerType = HandlerType.RESOURCE,
@@ -99,20 +95,18 @@ interface HandlerService {
      *
      * Example:
      * ```
-     * val handler = build(imposterConfig, pluginConfig, resourceMatcher) {
+     * val handler = build(pluginConfig, resourceMatcher) {
      *   // use httpExchange
      * }
      * router.get("/example").handler(handler)
      * ```
      *
-     * @param imposterConfig      the Imposter configuration
      * @param pluginConfig        the plugin configuration
      * @param resourceMatcher     the [ResourceMatcher] to use
      * @param httpExchangeHandler the consumer of the [HttpExchange]
      * @return the handler
      */
     fun build(
-        imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
         handlerType: HandlerType = HandlerType.RESOURCE,
@@ -120,7 +114,6 @@ interface HandlerService {
     ): HttpExchangeFutureHandler
 
     fun build(
-        imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceConfig: BasicResourceConfig,
         handlerType: HandlerType = HandlerType.RESOURCE,
@@ -131,7 +124,6 @@ interface HandlerService {
      * Same as [build] but wraps [httpExchangeHandler] in a future.
      */
     fun buildAndWrap(
-        imposterConfig: ImposterConfig,
         pluginConfig: PluginConfig,
         resourceMatcher: ResourceMatcher,
         handlerType: HandlerType = HandlerType.RESOURCE,

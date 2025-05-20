@@ -43,7 +43,6 @@
 
 package io.gatehill.imposter.service
 
-import io.gatehill.imposter.ImposterConfig
 import io.gatehill.imposter.http.HttpExchange
 import io.gatehill.imposter.http.HttpRouter
 import io.gatehill.imposter.model.HandlerType
@@ -67,7 +66,6 @@ import javax.inject.Inject
 class InterceptorServiceImpl @Inject constructor(
     private val handlerService: HandlerService,
     private val responseRoutingService: ResponseRoutingService,
-    private val imposterConfig: ImposterConfig,
 ) : InterceptorService, CoroutineScope by supervisedDefaultCoroutineScope {
 
     override fun configureInterceptorRoute(
@@ -76,7 +74,6 @@ class InterceptorServiceImpl @Inject constructor(
         interceptor: BasicResourceConfig,
     ) {
         val routeHandler = handlerService.build(
-            imposterConfig,
             pluginConfig,
             interceptor,
             handlerType = HandlerType.INTERCEPTOR

@@ -69,14 +69,14 @@ import javax.inject.Inject
  */
 class ExampleServiceImpl @Inject constructor(
     private val schemaService: SchemaService,
-    private val responseTransmissionService: ResponseTransmissionService
+    private val responseTransmissionService: ResponseTransmissionService,
+    private val imposterConfig: ImposterConfig,
 ) : ExampleService {
 
     /**
      * {@inheritDoc}
      */
     override fun serveExample(
-        imposterConfig: ImposterConfig,
         config: OpenApiPluginConfig,
         httpExchange: HttpExchange,
         responseBehaviour: ResponseBehaviour,

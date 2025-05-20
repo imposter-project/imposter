@@ -42,7 +42,6 @@
  */
 package io.gatehill.imposter.plugin.openapi.service
 
-import io.gatehill.imposter.ImposterConfig
 import io.gatehill.imposter.http.HttpExchange
 import io.gatehill.imposter.plugin.openapi.config.OpenApiPluginConfig
 import io.gatehill.imposter.script.ResponseBehaviour
@@ -56,7 +55,6 @@ interface ExampleService {
     /**
      * Attempt to respond with an example from the API specification.
      *
-     * @param imposterConfig    the Imposter engine configuration
      * @param config            the plugin configuration
      * @param httpExchange    the HTTP exchange
      * @param responseBehaviour the response behaviour
@@ -65,7 +63,6 @@ interface ExampleService {
      * @return `true` if an example was served, otherwise `false`
      */
     fun serveExample(
-        imposterConfig: ImposterConfig,
         config: OpenApiPluginConfig,
         httpExchange: HttpExchange,
         responseBehaviour: ResponseBehaviour,

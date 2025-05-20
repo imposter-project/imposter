@@ -57,7 +57,7 @@ import io.gatehill.imposter.store.factory.StoreFactory
 import io.gatehill.imposter.util.HttpUtil
 import io.gatehill.imposter.util.MapUtil
 import org.apache.logging.log4j.LogManager
-import java.util.Objects
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -82,19 +82,18 @@ class StoreRestApiServiceImpl @Inject constructor(
         allPluginConfigs: List<PluginConfig>,
         router: HttpRouter
     ) {
-        router.get("/system/store/{storeName}").handler(handleLoadAll(imposterConfig, allPluginConfigs))
-        router.delete("/system/store/{storeName}").handler(handleDeleteStore(imposterConfig, allPluginConfigs))
-        router.get("/system/store/{storeName}/{key}").handler(handleLoadSingle(imposterConfig, allPluginConfigs))
-        router.put("/system/store/{storeName}/{key}").handler(handleSaveSingle(imposterConfig, allPluginConfigs))
-        router.post("/system/store/{storeName}").handler(handleSaveMultiple(imposterConfig, allPluginConfigs))
-        router.delete("/system/store/{storeName}/{key}").handler(handleDeleteSingle(imposterConfig, allPluginConfigs))
+        router.get("/system/store/{storeName}").handler(handleLoadAll(allPluginConfigs))
+        router.delete("/system/store/{storeName}").handler(handleDeleteStore(allPluginConfigs))
+        router.get("/system/store/{storeName}/{key}").handler(handleLoadSingle(allPluginConfigs))
+        router.put("/system/store/{storeName}/{key}").handler(handleSaveSingle(allPluginConfigs))
+        router.post("/system/store/{storeName}").handler(handleSaveMultiple(allPluginConfigs))
+        router.delete("/system/store/{storeName}/{key}").handler(handleDeleteSingle(allPluginConfigs))
     }
 
     private fun handleLoadAll(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>
     ): HttpExchangeFutureHandler {
-        return handlerService.buildAndWrap(imposterConfig, allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
+        return handlerService.buildAndWrap(allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
             val request = httpExchange.request
             val storeName = request.getPathParam("storeName")!!
             val store = openStore(storeName)
@@ -124,10 +123,9 @@ class StoreRestApiServiceImpl @Inject constructor(
     }
 
     private fun handleDeleteStore(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>
     ): HttpExchangeFutureHandler {
-        return handlerService.buildAndWrap(imposterConfig, allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
+        return handlerService.buildAndWrap(allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
             val storeName = httpExchange.request.getPathParam("storeName")!!
             storeFactory.clearStore(storeName, ephemeral = false)
             LOGGER.debug("Deleted store: {}", storeName)
@@ -139,10 +137,9 @@ class StoreRestApiServiceImpl @Inject constructor(
     }
 
     private fun handleLoadSingle(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>
     ): HttpExchangeFutureHandler {
-        return handlerService.buildAndWrap(imposterConfig, allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
+        return handlerService.buildAndWrap(allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
             val request = httpExchange.request
             val storeName = request.getPathParam("storeName")!!
             val store = openStore(storeName)
@@ -172,10 +169,9 @@ class StoreRestApiServiceImpl @Inject constructor(
     }
 
     private fun handleSaveSingle(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>
     ): HttpExchangeFutureHandler {
-        return handlerService.buildAndWrap(imposterConfig, allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
+        return handlerService.buildAndWrap(allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
             val request = httpExchange.request
             val storeName = request.getPathParam("storeName")!!
             val store = openStore(storeName)
@@ -201,10 +197,9 @@ class StoreRestApiServiceImpl @Inject constructor(
     }
 
     private fun handleSaveMultiple(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>
     ): HttpExchangeFutureHandler {
-        return handlerService.buildAndWrap(imposterConfig, allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
+        return handlerService.buildAndWrap(allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
             val request = httpExchange.request
             val storeName = request.getPathParam("storeName")!!
             val store = openStore(storeName)
@@ -224,10 +219,9 @@ class StoreRestApiServiceImpl @Inject constructor(
     }
 
     private fun handleDeleteSingle(
-        imposterConfig: ImposterConfig,
         allPluginConfigs: List<PluginConfig>
     ): HttpExchangeFutureHandler {
-        return handlerService.buildAndWrap(imposterConfig, allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
+        return handlerService.buildAndWrap(allPluginConfigs, resourceMatcher) { httpExchange: HttpExchange ->
             val request = httpExchange.request
             val storeName = request.getPathParam("storeName")!!
             val store = openStore(storeName)

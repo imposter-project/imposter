@@ -167,7 +167,7 @@ class SoapPluginImpl @Inject constructor(
 
         // TODO parse HTTP binding to check for other verbs
         router.route(HttpMethod.POST, fullPath).handler(
-            handlerService.build(imposterConfig, config, soapResourceMatcher) { httpExchange: HttpExchange ->
+            handlerService.build(config, soapResourceMatcher) { httpExchange: HttpExchange ->
                 val bodyHolder: MessageBodyHolder = when (binding.type) {
                     BindingType.SOAP, BindingType.HTTP -> {
                         httpExchange.request.body?.let { body -> SoapUtil.parseBody(config, body) } ?: run {
