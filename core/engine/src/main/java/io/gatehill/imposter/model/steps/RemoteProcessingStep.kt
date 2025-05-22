@@ -92,13 +92,13 @@ class RemoteProcessingStep(
             ctx.config.capture?.forEach { (key, config) ->
                 captureService.captureItem(key, config, remoteExchange, evaluators)
             }
-            responseBehaviourFactory.build(statusCode, ctx.resourceConfig)
+            responseBehaviourFactory.build(statusCode, ctx.resourceConfig, httpExchange)
         } catch (e: Exception) {
             logger.error("Error sending remote request: {} {}", ctx.config.method, ctx.config.url, e)
             val emptyResourceConfig = object : AbstractResourceConfig() {
                 override val responseConfig = ResponseConfig()
             }
-            responseBehaviourFactory.build(HttpUtil.HTTP_INTERNAL_ERROR, emptyResourceConfig)
+            responseBehaviourFactory.build(HttpUtil.HTTP_INTERNAL_ERROR, emptyResourceConfig, httpExchange)
         }
     }
 }

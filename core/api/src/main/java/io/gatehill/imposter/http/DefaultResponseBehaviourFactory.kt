@@ -46,13 +46,22 @@ import com.google.common.base.Strings
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
 import io.gatehill.imposter.script.ReadWriteResponseBehaviour
 import io.gatehill.imposter.script.ReadWriteResponseBehaviourImpl
+import io.gatehill.imposter.script.ResponseBehaviour
+import io.gatehill.imposter.util.ResourceUtil
 
 /**
  * @author Pete Cornish
  */
 open class DefaultResponseBehaviourFactory protected constructor() : ResponseBehaviourFactory {
-    override fun build(statusCode: Int, resourceConfig: BasicResourceConfig): ReadWriteResponseBehaviour {
-        val responseBehaviour = ReadWriteResponseBehaviourImpl()
+    override fun build(
+        statusCode: Int,
+        resourceConfig: BasicResourceConfig,
+        exchangeState: HttpExchangeState,
+    ): ReadWriteResponseBehaviourImpl {
+        // previous handler(s) may have set response behaviour
+        val responseBehaviour = exchangeState.getOrPut(ResourceUtil.RC_RESPONSE_BEHAVIOUR) {
+            return@getOrPut ReadWriteResponseBehaviourImpl()
+        }
         populate(statusCode, resourceConfig, responseBehaviour)
         return responseBehaviour
     }
@@ -90,6 +99,33 @@ open class DefaultResponseBehaviourFactory protected constructor() : ResponseBeh
             responseBehaviour.withFailureType(responseConfig.failureType)
         }
         responseConfig.headers?.let { headers -> responseBehaviour.responseHeaders.putAll(headers) }
+    }
+
+    override fun merge(
+        source: ResponseBehaviour,
+        target: ReadWriteResponseBehaviour
+    ) {
+        if (source.statusCode != 0) {
+            target.withStatusCode(source.statusCode)
+        }
+        if (!Strings.isNullOrEmpty(source.responseFile)) {
+            target.withFile(source.responseFile!!)
+        }
+        if (!Strings.isNullOrEmpty(source.content)) {
+            target.withContent(source.content)
+        }
+        if (source.isTemplate) {
+            target.template()
+        }
+        if (source.performanceSimulation != null) {
+            target.withPerformance(source.performanceSimulation)
+        }
+        if (source.failureType != null) {
+            target.withFailureType(source.failureType)
+        }
+        if (source.responseHeaders.isNotEmpty()) {
+            target.responseHeaders.putAll(source.responseHeaders)
+        }
     }
 
     companion object {

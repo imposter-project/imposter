@@ -128,7 +128,11 @@ class ResponseRoutingServiceImpl @Inject constructor(
         checkNotNull(responseConfig) { "Response configuration must not be null" }
 
         val statusCode = statusCodeFactory.calculateStatus(resourceConfig)
-        val responseBehaviour: ReadWriteResponseBehaviour
+        var responseBehaviour: ReadWriteResponseBehaviour = responseBehaviourFactory.build(
+            statusCode,
+            resourceConfig,
+            httpExchange,
+        )
 
         val steps = stepService.determineSteps(pluginConfig, resourceConfig)
         if (logger.isTraceEnabled) {
@@ -142,7 +146,6 @@ class ResponseRoutingServiceImpl @Inject constructor(
                     LogUtil.describeRequestShort(httpExchange),
                 )
             }
-            responseBehaviour = responseBehaviourFactory.build(statusCode, resourceConfig)
         } else {
             val responseBehaviours = steps.map {
                 it.step.execute(
@@ -153,8 +156,17 @@ class ResponseRoutingServiceImpl @Inject constructor(
                     additionalContext,
                 )
             }
+
             // only the last response behaviour is used
-            responseBehaviour = responseBehaviours.last()
+            val lastResponseBehaviour = responseBehaviours.last()
+            if (lastResponseBehaviour.behaviourType == ResponseBehaviourType.SHORT_CIRCUIT) {
+                responseBehaviour = lastResponseBehaviour
+            } else {
+                responseBehaviourFactory.merge(
+                    lastResponseBehaviour,
+                    responseBehaviour,
+                )
+            }
         }
 
         // explicitly check if the root resource should have its response config used as defaults for its child resources

@@ -45,20 +45,38 @@ package io.gatehill.imposter.http
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
 import io.gatehill.imposter.plugin.config.resource.ResponseConfig
 import io.gatehill.imposter.script.ReadWriteResponseBehaviour
+import io.gatehill.imposter.script.ResponseBehaviour
 
 /**
  * @author Pete Cornish
  */
 interface ResponseBehaviourFactory {
-    fun build(statusCode: Int, resourceConfig: BasicResourceConfig): ReadWriteResponseBehaviour
+    fun build(
+        statusCode: Int,
+        resourceConfig: BasicResourceConfig,
+        exchangeState: HttpExchangeState,
+    ): ReadWriteResponseBehaviour
 
     /**
      * Sets (but does not overwrite) values on the [io.gatehill.imposter.script.ResponseBehaviour], from
      * those on [ResponseConfig].
      *
      * @param statusCode the status code
-     * @param responseConfig
+     * @param resourceConfig
      * @param responseBehaviour
      */
-    fun populate(statusCode: Int, resourceConfig: BasicResourceConfig, responseBehaviour: ReadWriteResponseBehaviour)
+    fun populate(
+        statusCode: Int,
+        resourceConfig: BasicResourceConfig,
+        responseBehaviour: ReadWriteResponseBehaviour
+    )
+
+    /**
+     * Merge values from the source [ResponseBehaviour] (if they are set)
+     * on to the target [ResponseBehaviour].
+     */
+    fun merge(
+        source: ResponseBehaviour,
+        target: ReadWriteResponseBehaviour
+    )
 }

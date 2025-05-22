@@ -46,6 +46,7 @@ import io.gatehill.imposter.http.DefaultResponseBehaviourFactory
 import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
 import io.gatehill.imposter.plugin.soap.config.SoapResponseConfig
 import io.gatehill.imposter.script.ReadWriteResponseBehaviour
+import io.gatehill.imposter.script.ResponseBehaviour
 
 /**
  * Extends base response behaviour population with specific
@@ -66,5 +67,15 @@ class SoapResponseBehaviourFactory : DefaultResponseBehaviourFactory() {
         // invoke superclass after calling `withSoapFault` as it
         // overrides the status code to 500
         super.populate(statusCode, resourceConfig, responseBehaviour)
+    }
+
+    override fun merge(
+        source: ResponseBehaviour,
+        target: ReadWriteResponseBehaviour
+    ) {
+        super.merge(source, target)
+        if (source.soapFault) {
+            target.withSoapFault()
+        }
     }
 }

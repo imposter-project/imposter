@@ -57,6 +57,7 @@ object ResourceUtil {
     const val RC_LAST_HANDLER_TYPE = "handler.type"
     const val RESOURCE_CONFIG_KEY = "io.gatehill.imposter.resourceConfig"
     const val RC_REQUEST_ID_KEY = "request.id"
+    const val RC_RESPONSE_BEHAVIOUR = "response.behaviour"
     const val RC_SEND_NOT_FOUND_RESPONSE = "response.sendNotFoundResponse"
 
     /**

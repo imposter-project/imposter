@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2021.
+ * Copyright (c) 2025.
  *
  * This file is part of Imposter.
  *
@@ -40,41 +40,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Imposter.  If not, see <https://www.gnu.org/licenses/>.
  */
-package io.gatehill.imposter.plugin.openapi.http
 
-import com.google.common.base.Strings
-import io.gatehill.imposter.http.DefaultResponseBehaviourFactory
-import io.gatehill.imposter.plugin.config.resource.BasicResourceConfig
-import io.gatehill.imposter.plugin.openapi.config.OpenApiResponseConfig
-import io.gatehill.imposter.script.ReadWriteResponseBehaviour
-import io.gatehill.imposter.script.ResponseBehaviour
+package io.gatehill.imposter.http
 
 /**
- * Extends base response behaviour population with specific
- * OpenAPI plugin configuration.
- *
- * @author Pete Cornish
+ * Holds state for an HTTP exchange.
  */
-class OpenApiResponseBehaviourFactory : DefaultResponseBehaviourFactory() {
-    override fun populate(
-        statusCode: Int,
-        resourceConfig: BasicResourceConfig,
-        responseBehaviour: ReadWriteResponseBehaviour
-    ) {
-        super.populate(statusCode, resourceConfig, responseBehaviour)
-        val configExampleName = (resourceConfig.responseConfig as OpenApiResponseConfig).exampleName
-        if (Strings.isNullOrEmpty(responseBehaviour.exampleName) && !Strings.isNullOrEmpty(configExampleName)) {
-            responseBehaviour.withExampleName(configExampleName!!)
-        }
+interface HttpExchangeState {
+    fun <T> get(key: String): T?
+
+    fun put(key: String, value: Any)
+
+    fun <T : Any> getOrPut(key: String, defaultSupplier: () -> T): T = get(key) ?: run {
+        val value = defaultSupplier()
+        put(key, value)
+        return@run value
     }
 
-    override fun merge(
-        source: ResponseBehaviour,
-        target: ReadWriteResponseBehaviour
-    ) {
-        super.merge(source, target)
-        if (!Strings.isNullOrEmpty(source.exampleName)) {
-            target.withExampleName(source.exampleName!!)
-        }
+    /**
+     * Like [getOrPut] but returns [Unit].
+     */
+    fun <T: Any> putIfAbsent(key: String, supplier: () -> T) {
+        getOrPut(key, supplier)
     }
 }

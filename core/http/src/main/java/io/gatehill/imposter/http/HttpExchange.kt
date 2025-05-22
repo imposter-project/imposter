@@ -45,7 +45,7 @@ package io.gatehill.imposter.http
 /**
  * @author Pete Cornish
  */
-interface HttpExchange {
+interface HttpExchange : HttpExchangeState {
     var phase: ExchangePhase
     val request: HttpRequest
     val response: HttpResponse
@@ -61,24 +61,6 @@ interface HttpExchange {
     fun fail(statusCode: Int)
     fun fail(statusCode: Int, cause: Throwable?)
     val failureCause: Throwable?
-
-    fun <T> get(key: String): T?
-    fun put(key: String, value: Any)
-
-    fun <T : Any> getOrPut(key: String, defaultSupplier: () -> T): T {
-        return get(key) ?: run {
-            val value = defaultSupplier()
-            put(key, value)
-            return@run value
-        }
-    }
-
-    /**
-     * Like [getOrPut] but returns [Unit].
-     */
-    fun <T: Any> putIfAbsent(key: String, supplier: () -> T) {
-        getOrPut(key, supplier)
-    }
 
     fun next()
 }
