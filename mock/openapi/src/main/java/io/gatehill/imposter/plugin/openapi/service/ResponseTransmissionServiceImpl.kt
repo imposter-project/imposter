@@ -52,6 +52,7 @@ import io.gatehill.imposter.util.MapUtil.YAML_MAPPER
 import io.swagger.v3.oas.models.examples.Example
 import org.apache.logging.log4j.LogManager
 import java.util.Objects
+import javax.activation.MimeType
 
 /**
  * Serialises and transmits examples to the client.
@@ -163,9 +164,10 @@ class ResponseTransmissionServiceImpl : ResponseTransmissionService {
      */
     private fun serialise(contentType: String, example: Any): String {
         return try {
-            val exampleResponse: String = when (contentType) {
-                "application/json" -> MapUtil.jsonify(example)
-                "text/x-yaml", "application/x-yaml", "application/yaml" -> YAML_MAPPER.writeValueAsString(example)
+            val mimeType = MimeType(contentType)
+            val exampleResponse: String = when {
+                mimeType.compatibleWith(JSON_CONTENT_TYPE) -> MapUtil.jsonify(example)
+                YAML_CONTENT_TYPES.any { mimeType.compatibleWith(it) } -> YAML_MAPPER.writeValueAsString(example)
                 else -> {
                     LOGGER.warn("Unsupported response MIME type '{}' - returning example object as string", contentType)
                     example.toString()
@@ -178,7 +180,20 @@ class ResponseTransmissionServiceImpl : ResponseTransmissionService {
         }
     }
 
+    private fun MimeType.compatibleWith(other: MimeType): Boolean {
+        return this.primaryType == other.primaryType && (
+                this.subType == other.subType
+                || this.subType.endsWith("+${other.subType}")
+                || other.subType.endsWith("+${this.subType}")
+                )
+    }
+
     companion object {
         private val LOGGER = LogManager.getLogger(ResponseTransmissionServiceImpl::class.java)
+        private val JSON_CONTENT_TYPE = MimeType("application/json")
+        private val YAML_CONTENT_TYPES = setOf("text/x-yaml", "application/yaml", "application/x-yaml")
+            .map{ MimeType(it) }
+
+
     }
 }
