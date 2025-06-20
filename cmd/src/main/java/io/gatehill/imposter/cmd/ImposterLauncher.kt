@@ -117,6 +117,9 @@ class ImposterLauncher(args: Array<String>) {
 
     @Option(name = "--serverFactory", usage = "Fully qualified class for server factory")
     private var serverFactory: String = VertxWebServerFactoryImpl::class.java.canonicalName
+    
+    @Option(name = "--soap", usage = "Enable SOAP-aware mode for capturing requests/responses with SOAPAction")
+    private var soapMode: Boolean = false
 
     companion object {
         private val LOGGER = LogManager.getLogger(ImposterLauncher::class.java)
@@ -204,6 +207,11 @@ class ImposterLauncher(args: Array<String>) {
             imposterConfig.configDirs = configDirs
             imposterConfig.plugins = plugins
             imposterConfig.pluginArgs = splitArgs
+            imposterConfig.soapMode = soapMode
+            
+            if (soapMode) {
+                LOGGER.info("SOAP-aware mode enabled - requests and responses will be saved with SOAPAction-based filenames")
+            }
         }
 
         LifecycleAwareLauncher().dispatch(originalArgs)

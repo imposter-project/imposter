@@ -81,6 +81,8 @@ class HandlerServiceImpl @Inject constructor(
     private val interceptorService: InterceptorService,
     private val responseService: ResponseService,
     private val upstreamService: UpstreamService,
+    private val soapAwareUpstreamService: SoapAwareUpstreamService,
+    private val imposterConfig: ImposterConfig,
 ) : HandlerService, CoroutineScope by supervisedDefaultCoroutineScope {
 
     private val shouldAddEngineResponseHeaders: Boolean =
@@ -339,11 +341,23 @@ class HandlerServiceImpl @Inject constructor(
         pluginConfig: PluginConfig,
         resourceConfig: BasicResourceConfig,
         httpExchange: HttpExchange,
-    ) = upstreamService.forwardToUpstream(
-        pluginConfig as UpstreamsHolder,
-        resourceConfig as PassthroughResourceConfig,
-        httpExchange
-    )
+    ) = if (imposterConfig.soapMode) {
+        // Use SOAP-aware upstream service if SOAP mode is enabled
+        soapAwareUpstreamService.forwardToUpstream(
+            pluginConfig as UpstreamsHolder,
+            resourceConfig as PassthroughResourceConfig,
+            httpExchange,
+            imposterConfig.configDirs.firstOrNull() ?: ".",
+            imposterConfig.soapMode
+        )
+    } else {
+        // Use standard upstream service
+        upstreamService.forwardToUpstream(
+            pluginConfig as UpstreamsHolder,
+            resourceConfig as PassthroughResourceConfig,
+            httpExchange
+        )
+    }
 
     companion object {
         private val LOGGER = LogManager.getLogger(HandlerServiceImpl::class.java)

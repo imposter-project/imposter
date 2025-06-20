@@ -59,6 +59,7 @@ import io.gatehill.imposter.service.ResponseService
 import io.gatehill.imposter.service.ResponseServiceImpl
 import io.gatehill.imposter.service.ScriptedResponseService
 import io.gatehill.imposter.service.SecurityService
+import io.gatehill.imposter.service.SoapAwareUpstreamService
 import io.gatehill.imposter.service.StepService
 import io.gatehill.imposter.service.UpstreamService
 import io.gatehill.imposter.service.script.EmbeddedScriptService
@@ -99,5 +100,6 @@ internal class EngineModule : AbstractModule() {
         bind(RemoteService::class.java).asSingleton()
         bind(StepService::class.java).asSingleton()
         bind(UpstreamService::class.java).asSingleton()
+        bind(SoapAwareUpstreamService::class.java).asSingleton()
     }
 }

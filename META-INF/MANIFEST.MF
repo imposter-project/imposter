@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: io.gatehill.imposter.cmd.ImposterLauncher
+Imposter-Version: 0.0.0-SNAPSHOT
+Multi-Release: true
+
