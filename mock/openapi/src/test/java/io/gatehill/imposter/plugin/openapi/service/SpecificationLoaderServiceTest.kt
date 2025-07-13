@@ -57,8 +57,11 @@ import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServer
 import io.vertx.core.http.HttpServerOptions
 import io.vertx.core.http.HttpServerRequest
-import org.junit.*
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import java.net.ServerSocket
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -78,7 +81,7 @@ class SpecificationLoaderServiceTest {
     private val service = SpecificationLoaderService(noOpFileCacheService)
     private var s3Mock: S3MockContainer? = null
 
-    @After
+    @AfterEach
     fun tearDown() {
         try {
             s3Mock?.takeIf { it.isRunning }?.stop()
@@ -180,13 +183,13 @@ class SpecificationLoaderServiceTest {
         private var vertx: Vertx? = null
 
         @JvmStatic
-        @BeforeClass
+        @BeforeAll
         fun beforeClass() {
             vertx = Vertx.vertx()
         }
 
         @JvmStatic
-        @AfterClass
+        @AfterAll
         @Throws(Exception::class)
         fun afterClass() {
             blockWait<AsyncResult<Void>?> { completionHandler -> vertx!!.close(completionHandler) }
