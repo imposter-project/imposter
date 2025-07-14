@@ -42,7 +42,6 @@
  */
 package io.gatehill.imposter.plugin.openapi.service
 
-import com.fasterxml.jackson.core.JsonProcessingException
 import io.gatehill.imposter.http.HttpExchange
 import io.gatehill.imposter.plugin.openapi.model.ContentTypedHolder
 import io.gatehill.imposter.util.HttpUtil.CONTENT_TYPE
@@ -50,9 +49,9 @@ import io.gatehill.imposter.util.LogUtil
 import io.gatehill.imposter.util.MapUtil
 import io.gatehill.imposter.util.MapUtil.YAML_MAPPER
 import io.swagger.v3.oas.models.examples.Example
+import jakarta.activation.MimeType
 import org.apache.logging.log4j.LogManager
 import java.util.Objects
-import javax.activation.MimeType
 
 /**
  * Serialises and transmits examples to the client.
@@ -174,26 +173,26 @@ class ResponseTransmissionServiceImpl : ResponseTransmissionService {
                 }
             }
             exampleResponse
-        } catch (e: JsonProcessingException) {
-            LOGGER.error("Error building example response", e)
-            ""
+        } catch (e: Exception) {
+            LOGGER.error("Error serialising response", e)
+            example.toString()
         }
     }
 
+    /**
+     * Extension method to check MIME type compatibility.
+     * Supports RFC 6838 structured syntax suffixes.
+     */
     private fun MimeType.compatibleWith(other: MimeType): Boolean {
-        return this.primaryType == other.primaryType && (
-                this.subType == other.subType
-                || this.subType.endsWith("+${other.subType}")
-                || other.subType.endsWith("+${this.subType}")
-                )
+        return (this.primaryType == other.primaryType && this.subType == other.subType) ||
+                this.subType.endsWith("+${other.subType}") ||
+                other.subType.endsWith("+${this.subType}")
     }
 
     companion object {
         private val LOGGER = LogManager.getLogger(ResponseTransmissionServiceImpl::class.java)
         private val JSON_CONTENT_TYPE = MimeType("application/json")
         private val YAML_CONTENT_TYPES = setOf("text/x-yaml", "application/yaml", "application/x-yaml")
-            .map{ MimeType(it) }
-
-
+            .map { MimeType(it) }
     }
 }

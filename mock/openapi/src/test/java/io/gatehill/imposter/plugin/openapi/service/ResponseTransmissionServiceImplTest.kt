@@ -139,6 +139,25 @@ class ResponseTransmissionServiceImplTest {
     }
 
     @Test
+    fun `should serialise as JSON for non-application json types with json suffix`() {
+        val httpExchange = createMockHttpExchange()
+        val testData = mapOf("metadata" to "test")
+        val example = ContentTypedHolder("text/vnd.something+json", testData)
+
+        service.transmitExample(httpExchange, example)
+
+        verify(httpExchange.response).putHeader("Content-Type", "text/vnd.something+json")
+
+        val responseCaptor = argumentCaptor<String>()
+        verify(httpExchange.response).end(responseCaptor.capture())
+        val response = responseCaptor.firstValue
+
+        // Verify it's JSON format
+        assertTrue(response.contains("\"metadata\""))
+        assertTrue(response.contains("\"test\""))
+    }
+
+    @Test
     fun `should serialise as YAML for YAML content types`() {
         val httpExchange = createMockHttpExchange()
         val testData = mapOf("key" to "value")

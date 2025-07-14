@@ -17,6 +17,7 @@ dependencies {
 
     implementation "io.swagger.parser.v3:swagger-parser-v3:$version_swagger_parser"
     implementation "com.atlassian.oai:swagger-request-validator-core:$version_swagger_request_validator"
+    implementation 'jakarta.activation:jakarta.activation-api:2.1.3'
 
     implementation platform("com.amazonaws:aws-java-sdk-bom:$version_aws_sdk")
     implementation 'com.amazonaws:aws-java-sdk-s3'
@@ -26,6 +27,8 @@ dependencies {
     testImplementation project(':test:api-tests')
     testImplementation "org.testcontainers:testcontainers:$version_testcontainers"
     testImplementation "com.adobe.testing:s3mock-testcontainers:$version_s3mock"
+    testImplementation "org.mockito:mockito-core:$version_mockito"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$version_mockito_kotlin"
 
     // java 11 compatibility
     testImplementation ("javax.xml.bind:jaxb-api:$version_jaxb_api")
