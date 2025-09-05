@@ -97,7 +97,7 @@ jobs:
 
       - name: Create release and upload Java assets
         if: ${{ inputs.release }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const script = require('./.github/github-release.js')
