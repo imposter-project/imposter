@@ -228,17 +228,14 @@ class ResponseServiceImpl @Inject constructor(
         } else {
             origResponseData
         }
-        
+
         // Process custom log message if present
+        // Log messages are always processed as templates per documentation
         if (resourceConfig is AbstractResourceConfig && resourceConfig.log != null) {
-            val logMessage = if (template) {
-                PlaceholderUtil.replace(resourceConfig.log!!, httpExchange, PlaceholderUtil.templateEvaluators)
-            } else {
-                resourceConfig.log!!
-            }
+            val logMessage = PlaceholderUtil.replace(resourceConfig.log!!, httpExchange, PlaceholderUtil.templateEvaluators)
             LOGGER.info("Resource log: {}", logMessage)
         }
-        
+
         response.end(responseData)
     }
 
