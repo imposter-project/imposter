@@ -48,7 +48,7 @@ import io.gatehill.imposter.plugin.config.capture.CaptureConfigHolder
 import io.gatehill.imposter.plugin.config.capture.ItemCaptureConfig
 import io.gatehill.imposter.plugin.config.security.SecurityConfig
 import io.gatehill.imposter.plugin.config.security.SecurityConfigHolder
-import java.util.*
+import java.util.UUID
 
 /**
  * Base configuration for plugins and sub-resources.
