@@ -14,18 +14,18 @@ updates:
       prefix: "chore"
       include: "scope"
 
-- package-ecosystem: pip
-  directory: "/"
-  schedule:
-    interval: "daily"
-    target-branch: "develop"
-    open-pull-requests-limit: 4
-    labels:
-      - "dependencies"
-      - "python"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: "daily"
+      target-branch: "develop"
+      open-pull-requests-limit: 4
+      labels:
+        - "dependencies"
+        - "python"
+      commit-message:
+        prefix: "chore"
+        include: "scope"
 
   - package-ecosystem: docker
     directory: "/"
