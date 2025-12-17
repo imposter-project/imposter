@@ -1,8 +1,0 @@
-plugin: "openapi"
-specFile: "openapi3-request-validation.yaml"
-
-validation:
-  request: true
-  levels:
-    # override the default level
-    validation.request.parameter.query.unexpected: ERROR

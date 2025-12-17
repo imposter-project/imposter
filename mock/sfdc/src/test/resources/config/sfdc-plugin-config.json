@@ -1,7 +1,0 @@
-{
-  "plugin": "sfdc",
-  "response": {
-    "staticFile": "sfdc-plugin-data.json"
-  },
-  "sObjectName": "Account"
-}

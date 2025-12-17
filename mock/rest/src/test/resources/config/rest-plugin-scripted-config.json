@@ -1,9 +1,0 @@
-{
-  "plugin": "rest",
-  "path": "/scripted",
-  "response": {
-    "scriptFile": "rest-plugin.groovy",
-    "staticFile": "rest-plugin-data1.json"
-  },
-  "contentType": "application/json"
-}

@@ -1,6 +1,0 @@
-# By default, ignore the following files and directories when searching for config files
-
-.git
-.idea
-.svn
-node_modules

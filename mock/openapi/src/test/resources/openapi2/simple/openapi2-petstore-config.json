@@ -1,4 +1,0 @@
-{
-  "plugin": "openapi",
-  "specFile": "petstore-expanded.yaml"
-}

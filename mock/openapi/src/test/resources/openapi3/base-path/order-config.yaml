@@ -1,5 +1,0 @@
-plugin: "openapi"
-specFile: "order-api.yaml"
-
-# custom path prefix
-path: /shop

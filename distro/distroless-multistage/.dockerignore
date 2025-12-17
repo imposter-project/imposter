@@ -1,9 +1,0 @@
-.git
-.github
-.gradle
-docs
-examples
-gradle
-scripts
-**/node_modules
-build/
