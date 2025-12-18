@@ -44,7 +44,7 @@ jobs:
           
       - name: Upload Test Reports
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-reports-java-${{ matrix.java }}
           path: "**/build/reports/tests/test"
