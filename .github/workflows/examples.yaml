@@ -8,13 +8,13 @@ jobs:
       checks: write
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Remove placeholder examples directory
         run: rm -rf examples
       
       - name: Checkout examples
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: 'imposter-project/examples'
           path: 'examples'

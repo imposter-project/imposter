@@ -31,7 +31,7 @@ jobs:
       SINCE_VERSION: "0.15.5"
       TESTCONTAINERS_RYUK_DISABLED: "true"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Java
         uses: actions/setup-java@v4
