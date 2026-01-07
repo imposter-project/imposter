@@ -18,14 +18,14 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-      target-branch: "main"
-      open-pull-requests-limit: 4
-      labels:
-        - "dependencies"
-        - "python"
-      commit-message:
-        prefix: "chore"
-        include: "scope"
+    target-branch: "main"
+    open-pull-requests-limit: 4
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
 
   - package-ecosystem: docker
     directory: "/"
