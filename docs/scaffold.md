@@ -4,9 +4,9 @@ You can get Imposter to create configuration files for you.
 
 If you have an existing endpoint from which to record requests and responses, see the [proxy documentation](./proxy_endpoint.md)
 
-If you have an OpenAPI specification, Imposter can 'scaffold' a mock based on the resources and methods, it contains.
+If you have an OpenAPI specification or a WSDL file, Imposter can 'scaffold' a mock based on the resources and methods it contains.
 
-> If you don't have either of these, it's easy to create the configuration using [the guide](./configuration.md).
+> If you don't have any of these, it's easy to create the configuration using [the guide](./configuration.md).
 
 ## Prerequisites
 
@@ -114,6 +114,45 @@ Imposter served the response based on what it captured.
 ### Making changes
 
 You can, of course, edit the configuration file so the mock behaves differently. When you change either the configuration file or response file, the Imposter CLI will restart to reflect your latest changes.
+
+## Scaffolding from a WSDL file
+
+If you have a WSDL file, Imposter can scaffold a SOAP mock configuration from it.
+
+Let's start with a WSDL file named `petstore.wsdl` that defines a `getPetById` operation.
+
+Run the scaffold command:
+
+    $ imposter scaffold
+
+    found 1 WSDL file(s)
+    generated 1 resources from WSDL
+    wrote Imposter config: /Users/mary/example/petstore-config.yaml
+
+The generated `petstore-config.yaml` file will look like this:
+
+```yaml
+# petstore-config.yaml
+---
+plugin: soap
+wsdlFile: petstore.wsdl
+
+resources:
+  - method: POST
+    operation: getPetById
+```
+
+The SOAP operations from the WSDL file have been used to generate the mock resources. Since the `soap` plugin is being used, Imposter will generate responses based on the schema/XSD types defined in the WSDL.
+
+### Testing the mock
+
+In the same directory as the files above, start Imposter:
+
+    $ imposter up
+
+Imposter will read the configuration files and start a mock of the SOAP service. You can then send SOAP requests to the mock endpoint.
+
+> Learn more about SOAP mocking in the [SOAP plugin documentation](./soap_plugin.md).
 
 ## What's next
 
