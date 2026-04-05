@@ -39,6 +39,7 @@ nav:
     - OpenAPI (and Swagger): 'openapi_plugin.md'
     - REST: 'rest_plugin.md'
     - SOAP (and WSDL): 'soap_plugin.md'
+    - gRPC (and Protobuf): 'grpc_plugin.md'
     - HBase: 'hbase_plugin.md'
     - SFDC (Salesforce): 'sfdc_plugin.md'
     - WireMock: 'wiremock_plugin.md'
@@ -102,6 +103,6 @@ nav:
     - Mocking SOAP web services with Imposter: 'https://medium.com/@outofcoffee/mocking-soap-web-services-with-imposter-da8e9666b5b4'
   
   - Developers:
-    - GitHub: 'https://github.com/imposter-project/imposter-jvm-engine'
+    - GitHub: 'https://github.com/imposter-project'
     - Roadmap: 'roadmap.md'
     - Build: 'build.md'

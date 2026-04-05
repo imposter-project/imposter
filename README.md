@@ -52,6 +52,7 @@ Imposter provides specialised mocks for the following scenarios:
 - **[OpenAPI](https://docs.imposter.sh/openapi_plugin)** - Support for OpenAPI (and Swagger) API specifications.
 - **[REST](https://docs.imposter.sh/rest_plugin)** - Mocks RESTful or plain HTTP APIs.
 - **[SOAP](https://docs.imposter.sh/soap_plugin)** - Support for SOAP web services (and WSDL files).
+- **[gRPC](https://docs.imposter.sh/grpc_plugin)** - Support for gRPC services using `.proto` files. _(5.x only)_
 - **[HBase](https://docs.imposter.sh/hbase_plugin)** - Basic HBase mock implementation.
 - **[SFDC (Salesforce)](https://docs.imposter.sh/sfdc_plugin)** - Basic Salesforce mock implementation.
 - **[WireMock](https://docs.imposter.sh/wiremock_plugin)** - Support for WireMock mappings files.
