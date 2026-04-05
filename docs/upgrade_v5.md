@@ -160,6 +160,16 @@ path: /api/:version/users/:id
 path: /api/{version}/users/{id}
 ```
 
+## OpenAPI remote schema references
+
+In Imposter 4, the JVM engine resolved remote OpenAPI `$ref` references (over HTTP) at load time. In Imposter 5, remote reference resolution is **disabled by default**, because outbound HTTP from a mock server is undesirable in locked-down environments.
+
+If your OpenAPI specifications rely on remote `$ref` resolution, you must explicitly opt in:
+
+```shell
+IMPOSTER_OPENAPI_ALLOW_REMOTE_REFS=true
+```
+
 ## Legacy configuration support
 
 If you want to use your existing Imposter 4 configuration files without modifying them, you can enable legacy configuration support by setting the following environment variable:
