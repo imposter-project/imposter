@@ -154,6 +154,8 @@ The request object is available on the `context`. It provides access to request 
 
 > Note: keys are always lowercase in `normalisedHeaders`, regardless of the request header casing. This aids script portability, avoiding case-sensitivity for header keys.
 
+> **Note on multipart/form-data requests:** When a request has `Content-Type: multipart/form-data`, the `body` property will be `null` and `formParams` may not contain all form fields. This is a limitation of the underlying HTTP engine. Text form fields from multipart parts should be available in `formParams`, but file upload content is not accessible through the script API. See [GitHub issue #575](https://github.com/imposter-project/imposter/issues/575) for more context.
+
 ## Response object
 
 Your scripts have access to the methods on `io.gatehill.imposter.script.MutableResponseBehaviour`.
