@@ -1,0 +1,38 @@
+name: Question
+description: Ask a question about using Imposter
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about Imposter? Please check the [documentation](https://docs.imposter.sh/) first, and then fill out the form below.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: What would you like to know?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What are you trying to achieve? Include any relevant configuration or examples.
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: Imposter version (optional)
+      description: Which version of Imposter are you using?
+      placeholder: e.g. 4.5.0
+    validations:
+      required: false
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add any other context that might be helpful.
+    validations:
+      required: false
