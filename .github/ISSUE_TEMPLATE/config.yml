@@ -3,6 +3,6 @@ contact_links:
   - name: Imposter documentation
     url: https://docs.imposter.sh/
     about: Please check the documentation before opening an issue.
-  - name: GitHub Discussions
-    url: https://github.com/orgs/imposter-project/discussions
-    about: For general discussion, ideas, and community Q&A.
+  - name: Getting started
+    url: https://docs.imposter.sh/getting_started/
+    about: If you are new to Imposter, please check the getting started guide.
