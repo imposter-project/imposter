@@ -1,0 +1,82 @@
+name: Bug report
+description: Report a problem with Imposter
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill out the form below so we can help you as quickly as possible.
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: When I do X, Y happens instead of Z.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce the issue?
+      placeholder: |
+        1. Start Imposter with '...'
+        2. Send a request to '...'
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What actually happened? Include any error messages or logs.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Imposter version
+      description: Which version of Imposter are you running? (e.g. output of `imposter --version`)
+      placeholder: e.g. 4.5.0
+    validations:
+      required: true
+  - type: dropdown
+    id: distribution
+    attributes:
+      label: How are you running Imposter?
+      options:
+        - CLI
+        - Docker
+        - JAR
+        - AWS Lambda
+        - Kubernetes
+        - Embedded (JVM)
+        - Embedded (Node.js)
+        - Other
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, JVM version, etc.
+      placeholder: |
+        - OS: macOS 14.5
+        - JVM: OpenJDK 21
+    validations:
+      required: false
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add any other context, configuration files, or screenshots that might help.
+    validations:
+      required: false
