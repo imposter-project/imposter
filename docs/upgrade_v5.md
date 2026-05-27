@@ -160,6 +160,27 @@ path: /api/:version/users/:id
 path: /api/{version}/users/{id}
 ```
 
+## New: Configuration variables
+
+Imposter 5 introduces a top-level `vars` section, letting you define values once and reference them inline with `${var.NAME}`. This is useful when migrating configs that previously repeated the same base path, host or identifier across multiple resources.
+
+```yaml
+plugin: rest
+vars:
+  api_base_path: /api/v2
+
+resources:
+- path: ${var.api_base_path}/users
+  response:
+    content: '{"ok": true}'
+
+- path: ${var.api_base_path}/items
+  response:
+    content: '{"ok": true}'
+```
+
+See [Configuration variables](./configuration.md#configuration-variables) for the full syntax, including default values.
+
 ## OpenAPI remote schema references
 
 In Imposter 4, the JVM engine resolved remote OpenAPI `$ref` references (over HTTP) at load time. In Imposter 5, remote reference resolution is **disabled by default**, because outbound HTTP from a mock server is undesirable in locked-down environments.
