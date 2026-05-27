@@ -1,6 +1,6 @@
 name: Question
 description: Ask a question about using Imposter
-title: "[Question]: "
+title: "[Question] "
 labels: ["question"]
 body:
   - type: markdown

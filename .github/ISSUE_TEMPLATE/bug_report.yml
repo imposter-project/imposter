@@ -1,6 +1,6 @@
 name: Bug report
 description: Report a problem with Imposter
-title: "[Bug]: "
+title: "bug: "
 labels: ["bug"]
 body:
   - type: markdown
