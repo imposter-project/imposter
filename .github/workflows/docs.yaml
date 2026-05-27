@@ -4,6 +4,11 @@ on:
     branches:
       - main
       - develop
+  pull_request:
+    paths:
+      - docs/**
+      - mkdocs.yml
+      - .github/workflows/docs.yaml
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -23,6 +28,10 @@ jobs:
 
       - name: Build static site
         run: mkdocs build
+
+      - name: Verify mermaid diagrams are recognised
+        run: |
+          grep -q 'class="mermaid"' site/deployment_patterns/index.html
 
       - name: Deploy to GitHub Pages
         if: ${{ github.ref_name == 'main' }}
