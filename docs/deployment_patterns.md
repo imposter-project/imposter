@@ -9,21 +9,20 @@ When deploying Imposter as a container or serverless function, a common pattern 
 For example, when [deploying Imposter on AWS Lambda](./run_imposter_aws_lambda.md), configuration can be held in an S3 bucket.
 
 ```mermaid
-C4Context
+flowchart TD
+    client(["`**User**
+    Client accessing the mock`"])
+    developer(["`**Developer**
+    Develops the mock`"])
+    mock["`**Mock**
+    Imposter mock engine`"]
+    store[("`**S3**
+    Configuration store`")]
 
-title External configuration pattern
-
-Person(client, "Person", "Client accessing the mock")
-Person(developer, "Developer", "Develops the mock")
-System(mock, "Mock", "Imposter mock engine")
-SystemDb(config_store, "S3", "Configuration store")
-
-Rel(developer, mock, "Deploys the mock engine")
-Rel(developer, config_store, "Deploys the mock configuration")
-Rel(client, mock, "Calls the mock")
-Rel(mock, config_store, "Fetches mock configuration")
-
-UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
+    developer -->|Deploys the mock engine| mock
+    developer -->|Deploys the mock configuration| store
+    client -->|Calls the mock| mock
+    mock -->|Fetches mock configuration| store
 ```
 
 ### Advantages
@@ -42,18 +41,16 @@ UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
 When deploying Imposter as a container or serverless function, it is possible to bundle the configuration and engine in the same deployment unit (e.g. container image or Lambda ZIP file). This avoids the need for an external configuration store.
 
 ```mermaid
-C4Context
+flowchart TD
+    client(["`**User**
+    Client accessing the mock`"])
+    developer(["`**Developer**
+    Develops the mock`"])
+    mock["`**Mock**
+    Imposter mock engine and configuration`"]
 
-title Bundled configuration pattern
-
-Person(client, "Person", "Client accessing the mock")
-Person(developer, "Developer", "Develops the mock")
-System(mock, "Mock", "Imposter mock engine and configuration")
-
-Rel(developer, mock, "Deploys the mock engine and config")
-Rel(client, mock, "Calls the mock")
-
-UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
+    developer -->|Deploys the mock engine and config| mock
+    client -->|Calls the mock| mock
 ```
 
 ### Advantages
