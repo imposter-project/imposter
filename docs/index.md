@@ -31,6 +31,7 @@ To begin, check out the [Getting started](getting_started.md) guide. See the _Co
 
 - [Advanced request matching](request_matching.md)
 - [Interceptors](./interceptors.md)
+- [Upstream services (passthrough)](./upstream_passthrough.md)
 - [OpenAPI validation](openapi_validation.md)
 - [Template queries](template_queries.md)
 - [Directory-based responses](directory_responses.md)
