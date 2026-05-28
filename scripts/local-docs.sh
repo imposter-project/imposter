@@ -45,16 +45,26 @@
 set -e
 
 # This script is used to view the documentation site locally.
+#
+# Set DETACH=1 to run the container in the background (for CI/scripted use).
+# The container is named "imposter-docs" so callers can stop it with
+# `docker rm -f imposter-docs`.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$( cd "${SCRIPT_DIR}"/../ && pwd )"
+
+if [[ "${DETACH:-}" == "1" ]]; then
+  RUN_OPTS=(--rm -d --name=imposter-docs)
+else
+  RUN_OPTS=(--rm -it --name=imposter-docs)
+fi
 
 docker build \
   --file="${ROOT_DIR}/docs/infrastructure/Dockerfile" \
   --tag=imposter-docs \
   "${ROOT_DIR}/docs"
 
-docker run --rm -it -p 8000:8000 \
+docker run "${RUN_OPTS[@]}" -p 8000:8000 \
   -v "${ROOT_DIR}/mkdocs.yml:/docs/mkdocs.yml:ro" \
   -v "${ROOT_DIR}/docs:/docs/docs:ro" \
   imposter-docs
