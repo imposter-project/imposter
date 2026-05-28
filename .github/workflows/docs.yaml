@@ -1,16 +1,52 @@
 name: Docs site
 on:
   push:
-    branches:
-      - main
-      - develop
   pull_request:
     paths:
       - docs/**
       - mkdocs.yml
+      - scripts/local-docs.sh
       - .github/workflows/docs.yaml
+
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build and serve docs site (detached)
+        run: DETACH=1 scripts/local-docs.sh
+
+      - name: Wait for docs site to be reachable
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8000/ >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "docs site did not become reachable" >&2
+          docker logs imposter-docs || true
+          exit 1
+
+      - name: Verify docs site content
+        run: |
+          curl -fsS http://localhost:8000/ | grep -q "Imposter"
+          curl -fsS http://localhost:8000/grpc_plugin/ | grep -q "gRPC"
+
+      - name: Verify mermaid diagrams are recognised
+        run: |
+          curl -fsS http://localhost:8000/deployment_patterns/ \
+            | grep -q 'class="mermaid"'
+
+      - name: Stop docs container
+        if: always()
+        run: docker rm -f imposter-docs || true
+
   deploy:
+    needs: test
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -26,13 +62,5 @@ jobs:
           PIP_CONSTRAINT: ./docs/infrastructure/constraints.txt
         run: pip install -r ./docs/infrastructure/requirements.txt
 
-      - name: Build static site
-        run: mkdocs build
-
-      - name: Verify mermaid diagrams are recognised
-        run: |
-          grep -q 'class="mermaid"' site/deployment_patterns/index.html
-
       - name: Deploy to GitHub Pages
-        if: ${{ github.ref_name == 'main' }}
         run: mkdocs gh-deploy --force
