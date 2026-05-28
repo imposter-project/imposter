@@ -4,8 +4,8 @@ Imposter can forward a matched request to a real upstream HTTP service and
 return the upstream's response verbatim, instead of serving a mocked one.
 
 This is useful for **partial mocking** — mocking some endpoints while
-proxying others to a live backend. It is supported by both the JVM and Go
-engines and uses the same configuration schema, so a single config file works
+proxying others to a live backend. It is supported by both Imposter 4.x and
+5.x and uses the same configuration schema, so a single config file works
 across both.
 
 > Not to be confused with the [`imposter proxy` CLI command](./proxy_endpoint.md),
