@@ -4,6 +4,12 @@ Imposter can generate mock configuration files for you by proxying an existing e
 
 > If you don't have an existing endpoint to proxy, it's easy to create the configuration using [the guide](./configuration.md).
 
+> Not to be confused with [upstream services (passthrough)](./upstream_passthrough.md),
+> which forwards matched requests to a real upstream at runtime and returns
+> its response verbatim. The `imposter proxy` CLI command on this page is a
+> scaffolding tool that records responses into mock files; it does not run as
+> part of a live mock.
+
 ## Prerequisites
 
 - Install the [Imposter CLI](./run_imposter_cli.md)
