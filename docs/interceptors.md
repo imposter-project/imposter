@@ -116,6 +116,10 @@ The second interceptor has a [script step](./steps.md). Within the script, `resp
 
 Both interceptors store data, which is later used by the `/example` resource.
 
+## Logging a message
+
+Interceptors support the `log` property to write a templated message to Imposter's log whenever they match. See [logging a message](./configuration.md#logging-a-message) for details.
+
 ## Examples
 
 See the following examples:
