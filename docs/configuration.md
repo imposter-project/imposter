@@ -245,6 +245,58 @@ Imposter allows you to capture elements of the request. You can use these elemen
 
 See [data capture](./data_capture.md) for more information.
 
+## Logging a message
+
+> **Available in Imposter 5 and later**
+
+Add a `log` property to a resource to write a message to Imposter's log whenever the resource is matched. This is useful for tracing which resources are being hit, or for surfacing key request details during development and testing.
+
+```yaml
+plugin: rest
+
+resources:
+  - method: POST
+    path: /hello
+    log: "hello world"
+    response:
+      content: "Hello, world!"
+```
+
+Each time a request matches the resource, the message is written to the log:
+
+```
+hello world
+```
+
+The message supports the same [template placeholders](./templates.md) as response content, so you can include details from the request:
+
+```yaml
+plugin: rest
+
+resources:
+  - method: POST
+    path: /orders/{orderId}
+    log: "received order ${context.request.pathParams.orderId} from ${context.request.headers.X-Client-ID}"
+    response:
+      statusCode: 201
+```
+
+The message is logged after the request has been matched and any [data capture](./data_capture.md) and [steps](./steps.md) have run, so it can reference values they produce.
+
+### Logging from interceptors
+
+[Interceptors](./interceptors.md) also support the `log` property. The message is logged whenever the interceptor matches, whether the interceptor short-circuits the response or allows processing to continue.
+
+```yaml
+plugin: rest
+
+interceptors:
+  - method: POST
+    path: /orders/{orderId}
+    log: "intercepted order ${context.request.pathParams.orderId}"
+    continue: true
+```
+
 ## Environment variables
 
 You can use environment variables as placeholders in plugin configuration files.
