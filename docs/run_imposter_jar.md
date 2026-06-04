@@ -2,6 +2,9 @@
 
 There are many ways to run Imposter. This section describes how to use a JAR file on the JVM.
 
+> **Note**
+> The JAR distribution applies to Imposter 4.x and earlier only. From Imposter 5.x onwards, Imposter is distributed as a native binary with no JVM dependency — see [Imposter CLI](./run_imposter_cli.md).
+
 <details markdown>
 <summary>Other ways to run Imposter</summary>
 
@@ -19,6 +22,7 @@ There are many ways to run Imposter. This section describes how to use a JAR fil
 **Within your CI/CD pipeline**
 
 - Use the [Imposter GitHub Actions](./github_actions.md) to start and stop Imposter during your CI/CD pipeline.
+- For other CI/CD platforms (GitLab, CircleCI, Jenkins, Azure Pipelines, Bitbucket, etc.) - see [Running in CI/CD pipelines](./ci_cd.md).
 
 </details>
 

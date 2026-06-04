@@ -19,6 +19,7 @@ There are many ways to run Imposter. This section describes how to use the Docke
 **Within your CI/CD pipeline**
 
 - Use the [Imposter GitHub Actions](./github_actions.md) to start and stop Imposter during your CI/CD pipeline.
+- For other CI/CD platforms (GitLab, CircleCI, Jenkins, Azure Pipelines, Bitbucket, etc.) - see [Running in CI/CD pipelines](./ci_cd.md).
 
 </details>
 
