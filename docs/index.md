@@ -37,6 +37,7 @@ To begin, check out the [Getting started](getting_started.md) guide. See the _Co
 - [Directory-based responses](directory_responses.md)
 - [Performance simulation](performance_simulation.md)
 - [Failure simulation](./failure_simulation.md)
+- [Rate limiting](./rate_limiting.md)
 - [Generating fake data](fake_data.md)
 - [CORS](cors.md)
 - [JavaScript scripting tips](javascript_tips.md)
