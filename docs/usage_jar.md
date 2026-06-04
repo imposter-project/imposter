@@ -3,6 +3,9 @@
 When you are using the [JAR approach](run_imposter_jar.md), some options can be controlled using command line arguments.
 
 > **Note**
+> The JAR distribution applies to Imposter 4.x and earlier only. Imposter 5.x onwards is distributed as a native binary — see [Imposter CLI](./run_imposter_cli.md).
+
+> **Note**
 > If you are using the CLI, see [this documentation](https://github.com/imposter-project/imposter-cli/blob/main/README.md) for a list of command line arguments.
 
 ## Available arguments

@@ -1,10 +1,10 @@
 # Generate configuration using scaffold
 
-You can get Imposter to create configuration files for you.
+Imposter can create configuration files from your API specifications (OpenAPI, Swagger, WSDL files, Protobuf services etc.)
 
-If you have an existing endpoint from which to record requests and responses, see the [proxy documentation](./proxy_endpoint.md)
+Alternatively, if you have an existing API endpoint from which to record requests and responses, see the [proxy documentation](./proxy_endpoint.md)
 
-If you have an OpenAPI specification or a WSDL file, Imposter can 'scaffold' a mock based on the resources and methods it contains.
+If you have an OpenAPI specification, WSDL file or Protobuf file, Imposter can 'scaffold' a mock based on the resources and methods it contains.
 
 > If you don't have any of these, it's easy to create the configuration using [the guide](./configuration.md).
 
