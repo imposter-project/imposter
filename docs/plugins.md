@@ -60,6 +60,16 @@ For example:
 
 This will install the plugin version matching the current engine version used by the CLI. The next time you run `imposter up`, the plugin will be available.
 
+### Configuring default plugins
+
+You can list plugins in your `.imposter.yaml` file (in the config directory) or in your global CLI config at `$HOME/.imposter/config.yaml`, so they are automatically installed when you run `imposter up`:
+
+```yaml
+plugins:
+  - store-dynamodb
+  - store-redis
+```
+
 ## Using the Docker image
 
 If you are using the [Docker image](./run_imposter_docker.md), you can bind-mount a local directory to the `/opt/imposter/plugins` directory within the container.
