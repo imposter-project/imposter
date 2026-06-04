@@ -231,7 +231,7 @@ imposter up
 
 ```bash
 export IMPOSTER_STORE_DRIVER=store-dynamodb
-export IMPOSTER_DYNAMODB_TABLE=imposter-store
+export IMPOSTER_STORE_DYNAMODB_TABLE=imposter-store
 imposter up
 ```
 
@@ -251,7 +251,7 @@ Configure rate limiting behaviour with these [environment variables](./environme
 | `IMPOSTER_RATE_LIMITER_TTL` | TTL for rate limit entries (seconds) | `300` (5 minutes) | `IMPOSTER_RATE_LIMITER_TTL=600` |
 | `IMPOSTER_STORE_DRIVER` | Store backend selection | in-memory | `IMPOSTER_STORE_DRIVER=store-redis` |
 | `REDIS_ADDR` | Redis server address (if using Redis) | - | `REDIS_ADDR=localhost:6379` |
-| `IMPOSTER_DYNAMODB_TABLE` | DynamoDB table name (if using DynamoDB) | - | `IMPOSTER_DYNAMODB_TABLE=imposter-store` |
+| `IMPOSTER_STORE_DYNAMODB_TABLE` | DynamoDB table name (if using DynamoDB) | - | `IMPOSTER_STORE_DYNAMODB_TABLE=imposter-store` |
 
 ## How it works
 
