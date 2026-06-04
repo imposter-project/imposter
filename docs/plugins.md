@@ -62,7 +62,7 @@ This will install the plugin version matching the current engine version used by
 
 ### Configuring default plugins
 
-You can list plugins in your `.imposter.yaml` file (in the config directory) or in your global CLI config at `$HOME/.imposter/config.yaml`, so they are automatically installed when you run `imposter up`:
+If you are running Imposter using the CLI, you can list plugins in your `.imposter.yaml` file (in the config directory) or in your global CLI config at `$HOME/.imposter/config.yaml`, so they are automatically installed when you run `imposter up`:
 
 ```yaml
 plugins:
