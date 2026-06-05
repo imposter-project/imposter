@@ -60,7 +60,7 @@ For example:
 
 This will install the plugin version matching the current engine version used by the CLI. The next time you run `imposter up`, the plugin will be available.
 
-### Configuring default plugins
+### Configuring plugins to install
 
 If you are running Imposter using the CLI, you can list plugins in your `.imposter.yaml` file (in the config directory) or in your global CLI config at `$HOME/.imposter/config.yaml`, so they are automatically installed when you run `imposter up`:
 
