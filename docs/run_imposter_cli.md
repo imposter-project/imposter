@@ -46,6 +46,7 @@ The CLI itself has no dependencies. Additional prerequisites depend on the [engi
 If you have Homebrew installed:
 
     brew tap imposter-project/imposter
+    brew trust imposter-project/imposter
     brew install imposter
 
 <details markdown>
@@ -56,6 +57,7 @@ If you previously installed Imposter using Homebrew from the deprecated tap `gat
 ```shell
 brew untap gatehill/imposter
 brew tap imposter-project/imposter
+brew trust imposter-project/imposter
 ```
 
 </details>
