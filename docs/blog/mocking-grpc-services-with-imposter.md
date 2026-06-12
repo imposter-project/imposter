@@ -85,6 +85,7 @@ The gRPC plugin is an external plugin available in Imposter 5.x. The easiest way
 
 ```bash
 brew tap imposter-project/imposter
+brew trust imposter-project/imposter
 brew install imposter
 ```
 
