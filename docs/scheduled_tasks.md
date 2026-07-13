@@ -51,11 +51,31 @@ Step bodies, URLs and headers support [response templates](./templates.md), so s
 | `name` | No | Identifies the schedule in logs |
 | `every` | One of `every`/`cron` | Interval between runs, e.g. `30s`, `5m`, `1h` |
 | `cron` | One of `every`/`cron` | Standard 5-field cron expression, e.g. `"0 * * * *"` |
+| `limit` | No | Maximum number of times the schedule fires; when omitted, the schedule fires for the lifetime of the mock |
 | `steps` | Yes | The [steps](./steps.md) to run on each firing |
 
 Each schedule entry must declare exactly one of `every` or `cron`.
 
 Runs of a given schedule do not overlap: if a run takes longer than the interval, the next run is delayed until it completes.
+
+### Limiting how many times a schedule fires
+
+Think carefully about setting `limit`. A schedule without one keeps firing for as long as the mock runs — for outbound pushes such as webhooks, that can mean an unbounded stream of requests to the receiving system, especially in long-lived deployments. Set `limit` unless the schedule genuinely needs to run forever:
+
+```yaml
+schedules:
+  - name: order-webhook
+    every: 30s
+    limit: 10        # fire at most 10 times, then stop
+    steps:
+      - type: remote
+        url: ${env.WEBHOOK_URL}
+        method: POST
+```
+
+Once a schedule reaches its limit it stops permanently (until the mock restarts) and logs that it has done so.
+
+Operators can also set a global default with the `IMPOSTER_SCHEDULE_LIMIT` environment variable — it applies to any schedule that does not declare its own `limit`, including connection-scoped WebSocket schedules. A schedule's own `limit` always takes precedence. There is no default value; when neither is set, schedules are unlimited.
 
 ## Cron expressions
 

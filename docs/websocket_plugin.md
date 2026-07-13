@@ -116,7 +116,7 @@ resources:
           template: true
 ```
 
-Each schedule entry uses `every` (a duration such as `30s` or `5m`) or `cron` (a standard 5-field cron expression), and can send `response`/`responses` and/or run [`steps`](./steps.md). See [Scheduled tasks](./scheduled_tasks.md) for the shared schedule syntax.
+Each schedule entry uses `every` (a duration such as `30s` or `5m`) or `cron` (a standard 5-field cron expression), and can send `response`/`responses` and/or run [`steps`](./steps.md). An optional `limit` caps the number of firings per connection; a continuous keepalive tick is a legitimate reason to omit it, but consider setting it otherwise. See [Scheduled tasks](./scheduled_tasks.md) for the shared schedule syntax, including the `IMPOSTER_SCHEDULE_LIMIT` global default.
 
 ### Acting on disconnect
 
