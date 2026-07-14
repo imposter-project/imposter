@@ -114,6 +114,7 @@ nav:
     - Mocking REST APIs with Imposter: 'https://medium.com/@outofcoffee/mocking-apis-with-imposter-53bd908632e5'
     - Mocking SOAP web services with Imposter: 'https://medium.com/@outofcoffee/mocking-soap-web-services-with-imposter-da8e9666b5b4'
     - Mocking gRPC services with Imposter: 'https://medium.com/@outofcoffee/mocking-grpc-services-with-imposter-dbe2ca8db06f'
+    - Mocking the OpenClaw Gateway with Imposter: 'https://medium.com/@outofcoffee/mocking-the-openclaw-gateway-with-imposter-3bfd9abfbdbe'
 
   - Developers:
     - GitHub: 'https://github.com/imposter-project'
