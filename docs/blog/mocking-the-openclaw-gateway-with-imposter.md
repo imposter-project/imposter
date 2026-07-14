@@ -107,10 +107,17 @@ The `tick` from the open resource, meanwhile, keeps firing on its 15-second [sch
 The plugin is built in, so there's nothing to install. With the [Imposter CLI](https://docs.imposter.sh/run_imposter_cli/):
 
 ```bash
-imposter up ./websocket/openclaw
+imposter up
 ```
 
-It listens on `http://localhost:8080` and takes a WebSocket connection on any path.
+> [!TIP]
+> Imposter not installed?
+> Install with Homebrew:
+> ```sh
+> brew install imposter-project/imposter/imposter
+> ```
+
+Imposter listens on `http://localhost:8080` and takes a WebSocket connection on any path.
 
 ## Trying it out
 
