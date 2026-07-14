@@ -37,12 +37,14 @@ nav:
     - Scripting: 'scripting.md'
     - Security: 'security.md'
     - Steps: 'steps.md'
+    - Scheduled tasks: 'scheduled_tasks.md'
   
   - Mock types:
     - OpenAPI (and Swagger): 'openapi_plugin.md'
     - REST: 'rest_plugin.md'
     - SOAP (and WSDL): 'soap_plugin.md'
     - gRPC (and Protobuf): 'grpc_plugin.md'
+    - WebSocket: 'websocket_plugin.md'
     - HBase: 'hbase_plugin.md'
     - SFDC (Salesforce): 'sfdc_plugin.md'
     - WireMock: 'wiremock_plugin.md'
