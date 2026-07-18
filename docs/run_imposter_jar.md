@@ -2,7 +2,7 @@
 
 There are many ways to run Imposter. This section describes how to use a JAR file on the JVM.
 
-> **Note**
+> [!NOTE]
 > The JAR distribution applies to Imposter 4.x and earlier only. From Imposter 5.x onwards, Imposter is distributed as a native binary with no JVM dependency — see [Imposter CLI](./run_imposter_cli.md).
 
 <details markdown>

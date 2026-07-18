@@ -14,7 +14,7 @@ This will load all configuration files from the configuration directory and all 
 
 ### Recursive config scan performance
 
-> **Warning**
+> [!WARNING]
 > When using recursive scan for configuration, directories with many files or subdirectories (such as `node_modules`) can significantly slow down Imposter startup time.
 
 Typically, you would not store your Imposter configuration files within a directory such as `node_modules`, so it is safe to ignore such paths when scanning for configuration files. The mechanism for this is a file named `.imposterignore`

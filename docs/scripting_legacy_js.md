@@ -8,7 +8,7 @@ To use the Nashorn JavaScript engine, you need to be running Imposter v4.0.0 or 
 
 ### Option 1: Using the CLI
 
-> **Note**
+> [!NOTE]
 > This option requires the [Imposter CLI](./run_imposter_cli.md) version 0.37.0 or later.
 
 To use this plugin, install it with the Imposter CLI:
@@ -37,7 +37,7 @@ export IMPOSTER_JS_PLUGIN=js-nashorn
 
 ## Example
 
-> **Note**
+> [!NOTE]
 > Complete the prerequisites first.
 
 Start the mock server with the `js-nashorn` engine:

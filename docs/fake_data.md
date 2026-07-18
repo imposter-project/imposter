@@ -51,7 +51,7 @@ Some common examples:
 | Country        | `fake.Address.country`         |
 | Phone number   | `fake.PhoneNumber.phoneNumber` |
 
-> **Note**
+> [!NOTE]
 > Valid values are those supported by the [Datafaker](https://github.com/datafaker-net/datafaker) library.
 
 #### Try it out
@@ -73,7 +73,7 @@ curl http://localhost:8080/users/1
 
 ### Fake data in OpenAPI specs
 
-> **Note**
+> [!NOTE]
 > This section applies to the [OpenAPI plugin](openapi_plugin.md).
 
 When using the `fake-data` plugin with the OpenAPI plugin, common property names in the OpenAPI specification, such as `firstName`, `email` etc., are replaced with fake data. This happens when no matching example is found in the specification.
@@ -115,5 +115,5 @@ favouriteColour:
   x-fake-data: Color.name
 ```
 
-> **Note**
+> [!NOTE]
 > Valid values are those supported by the [Datafaker](https://github.com/datafaker-net/datafaker) library.

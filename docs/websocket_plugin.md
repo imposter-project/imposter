@@ -8,7 +8,7 @@ description: Imposter WebSocket mock plugin
 
 Plugin name: `websocket`
 
-> **Note**
+> [!NOTE]
 > This plugin is available in Imposter 5.x (the `imposter-go` engine). It is not available in 4.x.
 
 The WebSocket plugin mocks WebSocket APIs. Clients connect over a standard WebSocket upgrade, then the mock can:

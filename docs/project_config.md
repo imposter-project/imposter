@@ -2,7 +2,7 @@
 
 When you run mocks with the [Imposter CLI](./run_imposter_cli.md), you can add a project configuration file to your mock directory to control how that project runs — for example, pinning the Imposter engine version, listing the plugins it needs, and setting environment variables. Because the file lives alongside your mocks, you can commit it to version control so everyone on your team runs the mocks the same way.
 
-> **Note**
+> [!NOTE]
 > This file is separate from your [mock configuration files](./configuration.md) (the `-config.yaml` files that define responses). It configures the engine version, plugins and environment variables, not the mock behaviour.
 
 ## File name
@@ -13,7 +13,7 @@ Name the file `imposter-project.yaml` (a `.yml` or `.json` extension also works)
 imposter-project.yaml
 ```
 
-> **Tip**
+> [!TIP]
 > Running [`imposter scaffold`](./scaffold.md) creates this file for you.
 
 ## Example

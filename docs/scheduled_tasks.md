@@ -6,7 +6,7 @@ description: Run periodic tasks such as webhook-style HTTP pushes
 
 # Scheduled tasks
 
-> **Note**
+> [!NOTE]
 > Schedules are available in Imposter 5.x (the `imposter-go` engine). They are not available in 4.x.
 
 Schedules let a mock *initiate* actions on a timer, independent of any inbound request. A common use is sending webhook-style HTTP notifications to another system while the mock is running.

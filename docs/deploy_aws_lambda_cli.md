@@ -28,7 +28,7 @@ $ ls -l
 mock-config.yaml   response.txt
 ```
 
-> **Note**
+> [!NOTE]
 > See the [Configuration section](./configuration.md) for more information.
 
 #### Step 1: Prepare your workspace
@@ -90,7 +90,7 @@ Now the remote is configured, deploy the Lambda function:
 $ imposter remote deploy
 ```
 
-> **Note**
+> [!NOTE]
 > The deploy command uses the standard AWS mechanisms for locating credentials. For example, you may have set environment variables, or use the `~/.aws/` directory, or an instance role if running within EC2.
 >
 > If you receive a credential error, check that:
@@ -120,7 +120,7 @@ $ curl https://url-to-invoke-lambda-function/system/status
 { "status": "ok" }
 ```
 
-> **Note**
+> [!NOTE]
 > If you receive the following error:
 > 
 > ```
@@ -147,7 +147,7 @@ Hello world!
 
 If you need to change a configuration option, such as memory, use the `imposter remote config` command and then run `imposter remote deploy` again.
 
-> **Note**
+> [!NOTE]
 > If you change the function name of your Lambda after deployment, future deployments will use the new name. This means that the old function with the previous name will still exist. Depending on your use case this may or may not be what you want to happen.
 
 ---

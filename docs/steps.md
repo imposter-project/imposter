@@ -17,14 +17,14 @@ Imposter supports the following step types:
 
 The `script` step type allows you to execute a script. The script has access to the request context and stores. Script code can be inline or in an external file.
 
-> **Note**
+> [!NOTE]
 > See the [scripting](./scripting.md) section for more information about writing scripts.
 
 #### Inline script
 
 Here is an example of an inline script.
 
-> **Note**
+> [!NOTE]
 > Inline scripts can be written in JavaScript or Groovy.
 > Set the `lang` property to either `javascript` or `groovy`
 
@@ -67,7 +67,7 @@ resources:
 
 Scripts can be stored in an external file. Here is an example of an external script.
 
-> **Note**
+> [!NOTE]
 > External scripts can be written in JavaScript or Groovy.
 
 Let's assume you have a file named `example.js` with the following content:
@@ -204,7 +204,7 @@ resources:
         console.log('Remote HTTP response status code: ' + stores.request.statusCode);
 ```
 
-> **Note**
+> [!NOTE]
 > Remember that the `request` store is ephemeral, and holds values for the current, in-flight request. See the [Stores documentation](./stores.md) for details.
 
 ### Example: Use previous step output in the mock response
@@ -235,5 +235,5 @@ resources:
     content: "${stores.request.responseBody}"
 ```
 
-> **Note**
+> [!NOTE]
 > Remember that the `request` store is ephemeral, and holds values for the current, in-flight request. See the [Stores documentation](./stores.md) for details.

@@ -2,7 +2,7 @@
 
 If you're using a CI/CD platform other than GitHub Actions, you can still run Imposter to mock your dependencies during testing.
 
-> **Note**
+> [!NOTE]
 > If you use GitHub Actions, there is a dedicated integration - see [Running in GitHub Actions](./github_actions.md).
 
 <details markdown>
@@ -51,7 +51,7 @@ test:
     - echo "Running tests against mock server at $IMPOSTER_BASE_URL"
 ```
 
-> **Note**
+> [!NOTE]
 > GitLab service containers cannot bind-mount repository files directly. Either bake your config into a custom image (`FROM outofcoffee/imposter`, see [Docker](./run_imposter_docker.md)), or use the CLI approach below.
 
 ## CircleCI

@@ -33,7 +33,7 @@ The following operators are supported:
 | `Matches`     | Checks if the expression result matches the regular expression specified in the `value` field.        |
 | `NotMatches`  | Checks if the expression result does not match the regular expression specified in the `value` field. |
 
-> **Note**
+> [!NOTE]
 > If no `operator` is specified, then `EqualTo` is used.
 
 ---
@@ -316,7 +316,7 @@ resources:
     statusCode: 400
 ```
 
-> **Note**
+> [!NOTE]
 > If no `operator` is specified, then `EqualTo` is used.
 
 ## Matching using expressions
