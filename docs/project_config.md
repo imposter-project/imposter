@@ -13,7 +13,8 @@ Name the file `imposter-project.yaml` (a `.yml` or `.json` extension also works)
 imposter-project.yaml
 ```
 
-> [Running [`imposter scaffold`](./scaffold.md) creates this file for you.
+> **Tip**
+> Running [`imposter scaffold`](./scaffold.md) creates this file for you.
 
 ## Example
 
@@ -36,8 +37,8 @@ See the [environment variables](./environment_variables.md) reference for values
 
 Imposter reads settings from several places. Where the same setting appears more than once, the later source wins:
 
-1. Your global CLI configuration (`$HOME/.imposter/config.yaml`)
-2. The project configuration file in your mock directory
+1. Your global CLI configuration (`$HOME/.imposter/config.yaml`), if it exists
+2. The project configuration file in your mock directory, if it exists
 3. Environment variables
 4. Command line flags
 
