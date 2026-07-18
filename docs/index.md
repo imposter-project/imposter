@@ -55,6 +55,7 @@ To begin, check out the [Getting started](getting_started.md) guide. See the _Co
 
 - [Configuration guide](configuration.md)
 - [Configuration location](config_location.md)
+- [Project configuration file](project_config.md)
 - [Scaffolding configuration](scaffold.md)
 - [Environment variables](environment_variables.md)
 - [Proxy an existing endpoint](proxy_endpoint.md)
