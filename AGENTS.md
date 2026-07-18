@@ -23,3 +23,19 @@ Pages live under `docs/` as Markdown. When you add a new page, wire it into both
 Match the surrounding pages: task-oriented and user-focused, with `> **Note**`
 callouts and a `## What's next` footer where it helps. Cross-link related pages
 with relative links (e.g. `./scaffold.md`).
+
+## Previewing and validating docs
+
+`scripts/local-docs.sh` builds the docs site in Docker and serves it locally at
+<http://localhost:8000> (set `DETACH=1` to run it in the background). To validate a
+change without serving, run a build against the same image:
+
+```bash
+docker build --file=docs/infrastructure/Dockerfile --tag=imposter-docs docs
+docker run --rm --entrypoint mkdocs \
+  -v "$PWD/mkdocs.yml:/docs/mkdocs.yml:ro" -v "$PWD/docs:/docs/docs:ro" \
+  imposter-docs build --site-dir /tmp/site
+```
+
+Check the output for broken-link warnings and confirm new pages are not reported
+as missing from the nav.
