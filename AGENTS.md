@@ -8,10 +8,10 @@ supporting tooling.
 
 User-facing product documentation for the whole Imposter project lives in this
 repo. Prefer adding or updating user docs here rather than in the individual tool
-repositories (such as `imposter-cli`), which should link to docs.imposter.sh
-instead of duplicating content. Maintainer- and developer-only material (build
-steps, internal design, contributing notes) belongs in the relevant tool's own
-repo.
+repositories (such as `imposter-cli`, `imposter-jvm-engine` or `imposter-go`),
+which should link to docs.imposter.sh instead of duplicating content.
+Maintainer- and developer-only material (build steps, internal design, contributing
+notes) belongs in the relevant tool's own repo.
 
 ## Adding or changing a docs page
 
