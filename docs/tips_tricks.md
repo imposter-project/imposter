@@ -17,13 +17,13 @@ You can pin the version of Imposter so you always get the same engine version.
 You can do this in a few ways using [the CLI](run_imposter_cli.md):
 
 1. Pass the `--version x.y.z` argument to `imposter up`, or
-2. Set `version: x.y.z` in an `.imposter.yaml` file in the config directory, or
+2. Set `version: x.y.z` in an `imposter-project.yaml` file in the config directory, or
 3. Set `version: x.y.z` in your `$HOME/imposter/config.yaml` file
 
 If you're using the Imposter [GitHub Actions](github_actions.md) in your CI/CD workflow, you can:
 
 1. Set the `version` input to the `imposter-github-action/start-mocks` action, or
-2. Set `version: x.y.z` in an `.imposter.yaml` file in the config directory
+2. Set `version: x.y.z` in an `imposter-project.yaml` file in the config directory
 
 ## Using a local Imposter JAR with the CLI
 
