@@ -160,7 +160,7 @@ If you want to control the logical operator you can use the extended form as fol
 
 Here, the value of the `example` query parameter is specified as a child property named `value`. The `operator` is also specified in this form, such as `EqualTo` or `NotEqualTo`.
 
-> **Note**
+> [!NOTE]
 > If no `operator` is specified, then `EqualTo` is used.
 
 The following operators are supported:

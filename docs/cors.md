@@ -9,7 +9,7 @@ cors:
   allowOrigins: all
 ```
 
-> **Warning**
+> [!WARNING]
 > This will allow all origins to make requests to the mock endpoint. This is not recommended for production use.
 
 ## Specifying allowed origins

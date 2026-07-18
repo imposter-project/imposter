@@ -64,7 +64,7 @@ $ zip -ur imposter-awslambda.zip config
   adding: config/mock.txt (deflated 22%)
 ```
 
-> **Note**
+> [!NOTE]
 > This command updates the existing ZIP file.
 
 The `imposter-awslambda.zip` file can be [deployed to AWS Lambda](./run_imposter_aws_lambda.md) as normal.
@@ -103,7 +103,7 @@ This command created a container image called `example/mock:v1` containing the c
 
 This is a standard Docker container image, so you can push it to a registry and run it anywhere Docker runs.
 
-> **Note**
+> [!NOTE]
 > The container image in this example is tagged as `example/mock:v1` but you can specify any valid container name as the `-o NAME` option. 
 
 Run the container:

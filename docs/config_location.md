@@ -18,7 +18,7 @@ To load configuration files from a directory, pass the path to the directory in 
 imposter up /path/to/config/dir
 ```
 
-> **Note**
+> [!NOTE]
 > If no directory is specified, Imposter will use the current working directory.
 
 ### S3

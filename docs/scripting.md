@@ -33,7 +33,7 @@ For example:
     ...
     201 Created
 
-> **Note**
+> [!NOTE]
 > See this [rest plugin example](https://github.com/imposter-project/examples/blob/main/rest/conditional-scripted) for a simple example.
 
 ### Another example
@@ -259,7 +259,7 @@ respond().withExampleName('example1')
 
 This selects the example from the OpenAPI `examples` section for the API response.
 
-> **Note**
+> [!NOTE]
 > See this [openapi plugin example](https://github.com/imposter-project/examples/blob/main/openapi/scripted-named-example) for a simple example.
 
 ### Using stores

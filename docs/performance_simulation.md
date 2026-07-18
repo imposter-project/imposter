@@ -10,7 +10,7 @@ The delay controls the time added _after_ any request processing has completed (
 
 Delays can be specified as an exact value, or a range. If a range is specified, then a random value (roughly uniformly distributed) will be selected between the minimum and maximum range values.
 
-> **Note**
+> [!NOTE]
 > Delays can also be combined with [failure simulation](./failure_simulation.md) effects. For example to simulate a delay followed by a closed connection.
 
 ### Configuration driven

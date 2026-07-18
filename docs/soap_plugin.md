@@ -245,7 +245,7 @@ resources:
       statusCode: 500
 ```
 
-> **Tip**
+> [!TIP]
 > Use conditional matching with resources, to only return a fault in particular circumstances.
 > See [fault-example](https://github.com/imposter-project/examples/blob/main/soap/fault-example) for an example of how to do this.
 

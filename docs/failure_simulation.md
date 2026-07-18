@@ -8,7 +8,7 @@ Failures can be injected via configuration or using a script driven approach.
 
 The failure takes effect _after_ any request processing has completed (scripts, plugins etc.) but before the response is sent.
 
-> **Note**
+> [!NOTE]
 > Failures can also be combined with [performance simulation](./performance_simulation.md) effects. For example to simulate a delay followed by a closed connection.
 
 The supported failure types are:

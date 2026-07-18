@@ -14,7 +14,7 @@ Enable the JVM debugger with the following environment variable:
 
     JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
 
-> **Note**
+> [!NOTE]
 > Here we have set the debug port to 8000.
 
 ### Docker users

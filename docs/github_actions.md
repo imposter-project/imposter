@@ -2,7 +2,7 @@
 
 If you're using GitHub Actions for your CI/CD pipeline, you can run Imposter to mock your dependencies during testing.
 
-> **Note**
+> [!NOTE]
 > Using a different CI/CD platform? See [Running in CI/CD pipelines](./ci_cd.md) for GitLab CI, CircleCI, Jenkins, Azure Pipelines and others.
 
 <details markdown>
@@ -30,7 +30,7 @@ This guide will show you how to start and stop mocks with GitHub Actions.
 
 ## Available Actions
 
-> **Note**
+> [!NOTE]
 > Replace `v1` in the examples below with the [latest release](https://github.com/imposter-project/imposter-github-action/releases) of the GitHub Actions.
 
 ### 1. Setup Imposter (`setup`)

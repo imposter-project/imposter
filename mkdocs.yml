@@ -7,9 +7,15 @@ site_name: Imposter Mocks
 
 plugins:
   - search
+  # Converts GitHub/Obsidian-style '> [!NOTE]' callouts into Material
+  # admonitions. Requires the 'admonition' and 'pymdownx.details' extensions
+  # below to render them.
+  - callouts
 
 markdown_extensions:
   - md_in_html
+  - admonition
+  - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
